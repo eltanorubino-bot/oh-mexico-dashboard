@@ -1,0 +1,37 @@
+name: Update Oh Mexico Dashboard
+
+on:
+  schedule:
+    # Runs daily at 8:00 AM EST (13:00 UTC)
+    - cron: '0 13 * * *'
+  workflow_dispatch:  # Manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch Instagram data and update dashboard
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ID: ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+        run: python update_dashboard.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet && echo "No changes" && exit 0
+          git add index.html
+          git commit -m "Daily dashboard update"
+          git push
