@@ -185,11 +185,72 @@
     .strategy-card .action-item { font-size:11px; color:#555; padding:4px 0; display:flex; align-items:flex-start; gap:6px; }
     .strategy-card .action-item::before { content:'→'; color:#C4622D; font-weight:700; flex-shrink:0; }
 
+    /* Planificación styles */
+    .plan-month-selector { display:flex; gap:8px; margin-bottom:20px; }
+    .plan-month-btn { padding:10px 24px; border-radius:20px; border:2px solid rgba(255,255,255,.2); background:transparent; color:rgba(255,255,255,.6); font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .plan-month-btn.active { background:#C4622D; color:#FFF; border-color:#C4622D; }
+    .plan-month-btn:hover { border-color:#C4622D; color:#FFF; }
+    .cal-post-card { background:#FFF; border-radius:10px; padding:14px; margin-bottom:8px; border-left:4px solid #eee; cursor:pointer; transition:all .2s; }
+    .cal-post-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.1); }
+    .cal-post-card.expanded { box-shadow:0 4px 16px rgba(0,0,0,.12); }
+    .cal-post-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; color:#FFF; margin-right:4px; }
+    .cal-post-title { font-size:13px; font-weight:600; color:#1B2A4A; margin:6px 0 4px; }
+    .cal-post-detail { font-size:12px; color:#555; line-height:1.5; margin-top:8px; padding-top:8px; border-top:1px solid #f0f0f0; }
+    .cal-post-detail strong { color:#1B2A4A; display:block; font-size:11px; margin-bottom:2px; text-transform:uppercase; letter-spacing:.3px; }
+    .stories-table { width:100%; border-collapse:separate; border-spacing:0; background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .stories-table th { background:#1B2A4A; color:#FFF; padding:12px 16px; font-size:12px; text-align:left; font-weight:600; }
+    .stories-table td { padding:12px 16px; font-size:12px; color:#555; border-bottom:1px solid #f0f0f0; }
+    .stories-table tr:last-child td { border-bottom:none; }
+    .stories-table tr:hover td { background:#F9FAFB; }
+    .pilar-ref-card { background:#FFF; border-radius:12px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.1); border-top:4px solid #C4622D; }
+    .pilar-ref-card h4 { font-size:15px; font-weight:600; color:#1B2A4A; margin-bottom:8px; }
+    .pilar-pct { font-size:28px; font-weight:700; color:#C4622D; }
+    .pilar-obj { font-size:12px; color:#666; margin:8px 0; line-height:1.5; }
+    .pilar-tipos { font-size:11px; color:#999; }
+    .calendar-month-title { font-size:20px; font-weight:700; color:#FFF; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+
     @media(max-width:768px) {
-      .chart-grid,.feed-grid,.competitor-grid,.locations-grid,.analyzer-grid,.strategy-grid { grid-template-columns:1fr; }
+      .chart-grid,.feed-grid,.competitor-grid,.locations-grid,.analyzer-grid,.strategy-grid,.kpi-grid { grid-template-columns:1fr; }
       .reels-grid { grid-template-columns:repeat(2,1fr); }
-      .header { padding:16px 20px; flex-direction:column; gap:12px; }
-      .tab-button { padding:10px 14px; font-size:13px; }
+      .header { padding:16px 16px; flex-direction:column; gap:12px; text-align:center; }
+      .header h1 { font-size:22px; }
+      .header p { font-size:12px; }
+      .content { padding:16px 12px; }
+      .tab-button { padding:8px 12px; font-size:12px; }
+      .tabs { gap:2px; }
+      .calendar-days { grid-template-columns:repeat(7,1fr); gap:4px; }
+      .calendar-day { padding:6px; min-height:60px; }
+      .calendar-date { font-size:10px; }
+      .calendar-content { font-size:9px; }
+      .calendar-day-header { font-size:11px; padding:6px 0; }
+      .sub-tabs { gap:4px; flex-wrap:wrap; }
+      .sub-tab-button { padding:6px 10px; font-size:11px; }
+      .pillar-selector { gap:4px; }
+      .pillar-chip { padding:6px 12px; font-size:11px; }
+      .kpi-value { font-size:22px; }
+      .kpi-card { padding:14px; }
+      .feed-item iframe { height:380px; }
+      .reel-item iframe { height:280px; }
+      .highlights-grid { grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:12px; }
+      .highlight-circle { width:70px; height:70px; font-size:28px; }
+      .analyzer-grid { grid-template-columns:1fr; }
+      .analyzer-post iframe { height:380px; }
+      .top-post-mini { flex-direction:column; }
+      .top-post-mini iframe { width:100%; height:300px; }
+      .post-preview { max-width:100%; }
+      .competitor-posts { flex-direction:column; }
+      .competitor-post iframe { height:280px; }
+      .stories-table { font-size:11px; display:block; overflow-x:auto; }
+      .plan-month-selector { flex-wrap:wrap; }
+    }
+    @media(max-width:480px) {
+      .header h1 { font-size:18px; }
+      .tab-button { padding:6px 8px; font-size:11px; }
+      .calendar-days { grid-template-columns:1fr; gap:6px; }
+      .calendar-day { min-height:auto; padding:10px; }
+      .calendar-header { display:none; }
+      .reels-grid { grid-template-columns:1fr; }
+      .kpi-value { font-size:20px; }
     }
   </style>
 </head>
@@ -209,6 +270,9 @@
       const [generatedPost, setGeneratedPost] = React.useState(null);
       const [analyzerPost, setAnalyzerPost] = React.useState(0);
       const [creadorSubTab, setCreadorSubTab] = React.useState('generator');
+      const [planMonth, setPlanMonth] = React.useState('abril');
+      const [planSubTab, setPlanSubTab] = React.useState('calendario');
+      const [expandedPost, setExpandedPost] = React.useState(null);
 
       /* ===== DATA ===== */
       const seguidoresData = [
@@ -247,37 +311,87 @@
         { handle:'@bodegataqueria', followers:'96.2K', posts:'3419', verified:true, location:'South Florida, Chicago & DC', bio:'Taqueria & Speakeasy Lounge', posts_shortcodes:['DWCHvM7lPly','DV16vYWDxxJ'] }
       ];
 
-      const calendarDays = [
-        { date:1, content:'Reel: Molcajete close-up', type:'reel', pillar:'platos' },
-        { date:2, content:'Post: Taco Tuesday promo', type:'post', pillar:'promos' },
-        { date:3, content:'Story: Daily Special', type:'story', pillar:'promos' },
-        { date:4, content:'Reel: Guac prep BTS', type:'reel', pillar:'bts' },
-        { date:5, content:'Post: Team highlight', type:'post', pillar:'bts' },
-        { date:6, content:'Reel: Happy Hour vibe', type:'reel', pillar:'bebidas' },
-        { date:7, content:'Post: UGC repost', type:'post', pillar:'ugc' },
-        { date:8, content:'Story: Live cooking', type:'story', pillar:'bts' },
-        { date:9, content:'Post: New ceviche dish', type:'post', pillar:'platos' },
-        { date:10, content:'Reel: Margarita making', type:'reel', pillar:'bebidas' },
-        { date:11, content:'Post: Mariachi Friday', type:'post', pillar:'cultura' },
-        { date:12, content:'Reel: Lincoln Road vibe', type:'reel', pillar:'locaciones' },
-        { date:13, content:'Story: Weekend promo', type:'story', pillar:'promos' },
-        { date:14, content:'Post: Customer review', type:'post', pillar:'ugc' },
-        { date:15, content:'Reel: Taco Tuesday BTS', type:'reel', pillar:'platos' },
-        { date:16, content:'Post: Cocktail of week', type:'post', pillar:'bebidas' },
-        { date:17, content:'Story: Event teaser', type:'story', pillar:'cultura' },
-        { date:18, content:'Post: Chef special', type:'post', pillar:'platos' },
-        { date:19, content:'Reel: Kitchen chaos', type:'reel', pillar:'bts' },
-        { date:20, content:'Post: Food blogger repost', type:'post', pillar:'ugc' },
-        { date:21, content:'Reel: Family recipe', type:'reel', pillar:'platos' },
-        { date:22, content:'Story: Behind scenes', type:'story', pillar:'bts' },
-        { date:23, content:'Post: Weekend brunch', type:'post', pillar:'promos' },
-        { date:24, content:'Reel: Ocean Drive sunset', type:'reel', pillar:'locaciones' },
-        { date:25, content:'Post: Live music night', type:'post', pillar:'cultura' },
-        { date:26, content:'Story: Espanola Way', type:'story', pillar:'locaciones' },
-        { date:27, content:'Reel: Menu highlight', type:'reel', pillar:'platos' },
-        { date:28, content:'Post: Tag a friend', type:'post', pillar:'ugc' },
-        { date:29, content:'Post: Thank you post', type:'post', pillar:'ugc' },
-        { date:30, content:'Reel: Month recap', type:'reel', pillar:'bts' }
+      /* ===== PILAR COLORS ===== */
+      const pilarColors = { 'Sabor Autentico':'#C4622D', 'Herencia y Cultura':'#6B7D3A', 'Experiencia SoBe':'#D4A030', 'Prueba Social':'#7B1FA2', 'Promocion':'#1565C0' };
+
+      /* ===== ABRIL 2026 CALENDAR (from Excel) ===== */
+      const calendarAbril = [
+        {date:1,dia:'Mie',pilar:'Sabor Autentico',formato:'Reel',tema:'Molcajete Reveal',caption:"The molcajete doesn't wait. Neither should you. Bold flavors, fire presentation — just how we like it. Reserve your table tonight.",hashtags:'#MolcajeteTime #MiamiMexicanFood #MiamiFoodie #LincolnRoad #MiamiBeachEats',cta:'Reserve your table tonight',notas:'Close-up, steam rising, warm lighting'},
+        {date:2,dia:'Jue',pilar:'Herencia y Cultura',formato:'Carrusel',tema:'Historia del Mole',caption:"Mole isn't a sauce. It's a legacy. 30+ ingredients, 3 generations, 1 unforgettable flavor. Swipe to taste the history.",hashtags:'#MoleTradicional #MexicanHeritage #MiamiFoodScene #AuthenticMexican',cta:'Swipe to taste the history',notas:'3 slides: ingredients, cooking, plated'},
+        {date:3,dia:'Vie',pilar:'Experiencia SoBe',formato:'Reel',tema:'Viernes en Lincoln Road',caption:"Friday on Lincoln Road hits different with Oh Mexico. Live mariachis, cold margaritas, and the energy of South Beach.",hashtags:'#LincolnRoad #FridayVibes #MiamiBeachNightlife #MiamiEats',cta:'Come feel the energy tonight',notas:'Evening ambiance, crowd, music'},
+        {date:5,dia:'Dom',pilar:'Prueba Social',formato:'Reel',tema:'Food Blogger Repost',caption:"When the food speaks for itself. Thanks @miamifoodcritic for stopping by. The queso fundido doesn't disappoint — ever.",hashtags:'#MiamiFood #FoodReview #MiamiFoodie #MiamiBeachEats',cta:'Tag us for a chance to be featured',notas:'UGC repost with brand overlay'},
+        {date:6,dia:'Lun',pilar:'Sabor Autentico',formato:'Imagen',tema:'Plato del Dia',caption:"Monday called. We answered with birria tacos. Slow-cooked, stacked, and waiting for you.",hashtags:'#BirriaTacos #MondayMotivation #MiamiEats #MexicanFood',cta:'Available today at all locations',notas:'Hero shot, white plate, colorful garnish'},
+        {date:7,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Taco Tuesday $5 Tacos',caption:"$5 TACOS ARE BACK. Every Tuesday. Every location. No excuses. Bring your crew.",hashtags:'#TacoTuesday #MiamiDeals #TacoLovers #MiamiBeach',cta:'See you Tuesday',notas:'Fast cuts, multiple taco varieties'},
+        {date:8,dia:'Mie',pilar:'Sabor Autentico',formato:'Reel',tema:'Chef Prep BTS',caption:"6 AM. Tortillas from scratch. Salsas grinding. No shortcuts. This is how Oh Mexico wakes up.",hashtags:'#BehindTheScenes #ChefLife #KitchenBTS #MiamiFoodScene',cta:'Come taste the difference',notas:'Time-lapse, morning light, kitchen action'},
+        {date:9,dia:'Jue',pilar:'Herencia y Cultura',formato:'Imagen',tema:'Dia de la Tortilla',caption:"April 9 = National Tortilla Day. We make ours by hand, every single day. Come watch the magic.",hashtags:'#NationalTortillaDay #Handmade #MexicanTradition #MiamiFood',cta:'Free tortilla demo today 5-7PM',notas:'Hands pressing tortillas, comal'},
+        {date:10,dia:'Vie',pilar:'Experiencia SoBe',formato:'Reel',tema:'Happy Hour Friday',caption:"Happy hour on Ocean Drive with a mezcal sunset. The weekend starts here.",hashtags:'#HappyHour #MiamiCocktails #OceanDrive #MezcalLovers',cta:'Happy Hour 4-7PM every Friday',notas:'Cocktails with sunset backdrop'},
+        {date:12,dia:'Dom',pilar:'Prueba Social',formato:'Carrusel',tema:'Customer Reviews Roundup',caption:"Don't take our word for it. Swipe through what our guests are saying. 5 stars across the board.",hashtags:'#MiamiRestaurants #FoodReview #GuestLove #5Stars',cta:'Leave your review — link in bio',notas:'Screenshots of reviews + food photos'},
+        {date:13,dia:'Lun',pilar:'Sabor Autentico',formato:'Reel',tema:'Ceviche de Pulpo',caption:"Fresh catch. Bold citrus. The ceviche that makes you close your eyes and forget you're in Miami.",hashtags:'#Ceviche #MiamiSeafood #MexicanCuisine #FreshCatch',cta:'Try it today — limited quantity',notas:'Overhead pour shot, lime squeeze'},
+        {date:14,dia:'Mar',pilar:'Promocion',formato:'Imagen',tema:'Margarita 2x1',caption:"2-for-1 Margaritas. Tuesday just got twice as good. Bring someone who deserves one.",hashtags:'#MargaritaTime #2for1 #MiamiDeals #DrinkMiami',cta:'Tag your +1',notas:'Two margaritas, colorful, ice close-up'},
+        {date:15,dia:'Mie',pilar:'Herencia y Cultura',formato:'Reel',tema:'Abuelas Recipe Series: Tamales',caption:"Abuela's tamales. The recipe hasn't changed in 50 years. And it never will. This is how we honor tradition.",hashtags:'#Tamales #MexicanRecipe #AbuelasCooking #FamilyRecipe',cta:'Ask about our weekend tamale special',notas:'Elderly hands, husks, steaming pot'},
+        {date:16,dia:'Jue',pilar:'Experiencia SoBe',formato:'Imagen',tema:'Espanola Way Vibes',caption:"Espanola Way + Oh Mexico = the most charming dinner in Miami Beach. Pink walls, great food, unforgettable nights.",hashtags:'#EspanolaWay #MiamiBeachDining #MiamiHiddenGem #DateNight',cta:'Book your Espanola Way dinner',notas:'Street view with restaurant exterior'},
+        {date:17,dia:'Vie',pilar:'Sabor Autentico',formato:'Reel',tema:'Churros con Chocolate',caption:"Crispy outside. Soft inside. Dipped in Mexican chocolate. Our churros are the perfect ending — or beginning.",hashtags:'#Churros #MexicanDessert #MiamiFoodie #SweetTooth',cta:'Save room for dessert',notas:'Dipping action shot, slow-mo'},
+        {date:19,dia:'Dom',pilar:'Prueba Social',formato:'Reel',tema:'UGC TikToker Repost',caption:"POV: You finally try Oh Mexico. Yeah, that's the reaction we were going for. Thanks @tiktoker for the love.",hashtags:'#POV #MiamiFoodTikTok #FoodReaction #ViralFood',cta:'Film your reaction for a chance to be featured',notas:'TikTok-style repost with brand intro'},
+        {date:20,dia:'Lun',pilar:'Sabor Autentico',formato:'Imagen',tema:'Enchiladas Suizas',caption:"Enchiladas Suizas — creamy, tangy, with just the right kick. The plate that keeps them coming back.",hashtags:'#Enchiladas #MexicanComfortFood #MiamiEats #AuthenticFlavor',cta:'Available daily — dine in or takeout',notas:'Overhead shot, green sauce, crema drizzle'},
+        {date:21,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Taco Tuesday Behind Scenes',caption:"What goes into Taco Tuesday at Oh Mexico? 200 tortillas. 50 lbs of carnitas. 1 epic evening. Every. Single. Week.",hashtags:'#TacoTuesday #BTS #MiamiTacos #FoodPrep',cta:'$5 tacos every Tuesday',notas:'Kitchen prep montage, numbers overlay'},
+        {date:22,dia:'Mie',pilar:'Herencia y Cultura',formato:'Carrusel',tema:'Oaxacan Mezcal Guide',caption:"Mezcal 101: From the agave fields of Oaxaca to your glass at Oh Mexico. Swipe to become an expert.",hashtags:'#Mezcal #Oaxaca #MexicanSpirits #MiamiBar',cta:'Ask your server for a mezcal flight',notas:'4 slides: agave, production, tasting, pairing'},
+        {date:23,dia:'Jue',pilar:'Experiencia SoBe',formato:'Reel',tema:'Ocean Drive Sunset Dinner',caption:"Sunset on Ocean Drive. A plate of carne asada. A cold Modelo. Some moments you just can't plan.",hashtags:'#OceanDrive #MiamiSunset #DinnerWithAView #MiamiBeach',cta:'Tables with a view — reserve now',notas:'Golden hour, outdoor table, food + ocean'},
+        {date:24,dia:'Vie',pilar:'Sabor Autentico',formato:'Reel',tema:'Guacamole Tableside',caption:"Tableside guac: mortar, pestle, and pure magic. Made fresh. Made your way. Made to impress.",hashtags:'#Guacamole #Tableside #FreshMade #MiamiDining',cta:'Request tableside guac at any location',notas:'POV tableside prep, smashing avocado'},
+        {date:26,dia:'Dom',pilar:'Prueba Social',formato:'Imagen',tema:'Google Reviews Milestone',caption:"500+ Google Reviews and counting. 4.7 stars. Thank you, Miami, for making us your go-to Mexican spot.",hashtags:'#MiamiRestaurants #GoogleReviews #TopRated #MiamiBest',cta:'Leave us a review — link in bio',notas:'Branded graphic with review stats'},
+        {date:27,dia:'Lun',pilar:'Sabor Autentico',formato:'Reel',tema:'Tacos al Pastor',caption:"The spit turns. The pineapple caramelizes. The taco comes together. Al Pastor, the way it should be.",hashtags:'#TacosAlPastor #StreetFood #MiamiMexican #Trompo',cta:'Try our Al Pastor — today only with extra pineapple',notas:'Trompo spinning, slicing action'},
+        {date:28,dia:'Mar',pilar:'Promocion',formato:'Imagen',tema:'Cinco de Mayo Countdown',caption:"5 days until Cinco de Mayo. Reservations are filling up. Don't be the one watching from the sidelines.",hashtags:'#CincoDeMayo #MiamiEvents #MexicanParty #Countdown',cta:'Reserve now — link in bio',notas:'Countdown graphic, festive design'},
+        {date:29,dia:'Mie',pilar:'Herencia y Cultura',formato:'Reel',tema:'Making Horchata from Scratch',caption:"Rice, cinnamon, vanilla. Three ingredients, one legendary drink. Our horchata is made fresh daily — and it shows.",hashtags:'#Horchata #MexicanDrinks #Homemade #MiamiFoodScene',cta:'Free horchata sample this Wednesday',notas:'Blending, straining, pouring over ice'},
+        {date:30,dia:'Jue',pilar:'Experiencia SoBe',formato:'Reel',tema:'Cinco de Mayo Eve',caption:"Tomorrow is Cinco de Mayo. Tonight is the warm-up. DJ, drink specials, and tacos flowing. All 3 locations.",hashtags:'#CincoDeMayoEve #MiamiParty #MexicanFiesta #MiamiNightlife',cta:'Walk-ins welcome tonight',notas:'Party prep, decorations, DJ setup'}
+      ];
+
+      /* ===== MAYO 2026 CALENDAR ===== */
+      const calendarMayo = [
+        {date:1,dia:'Vie',pilar:'Promocion',formato:'Reel',tema:'Cinco de Mayo Fiesta',caption:"CINCO DE MAYO IS HERE. Live mariachis. $3 tacos. $5 margaritas. All day. All night. All 3 locations.",hashtags:'#CincoDeMayo #MiamiParty #MexicanFiesta #TacoFiesta',cta:'No reservations needed — just show up',notas:'Fiesta montage, crowded, festive'},
+        {date:2,dia:'Sab',pilar:'Experiencia SoBe',formato:'Reel',tema:'Cinco de Mayo Day 2',caption:"The fiesta doesn't stop. Day 2 of our Cinco de Mayo weekend — drink specials, live music, and the best tacos in Miami.",hashtags:'#CincoDeMayo #MiamiWeekend #PartyMiami #LincolnRoad',cta:'Walk-ins welcome all weekend',notas:'Weekend crowd, music, food action'},
+        {date:4,dia:'Lun',pilar:'Prueba Social',formato:'Carrusel',tema:'Cinco de Mayo Recap',caption:"What a weekend. 3 locations. 2,000+ tacos. 1 incredible community. Swipe to relive Cinco de Mayo 2026.",hashtags:'#CincoDeMayo2026 #MiamiRecap #OhMexico #BestWeekendEver',cta:'Tag us in your Cinco photos',notas:'Best crowd photos + stats overlay'},
+        {date:5,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Taco Tuesday Post-Cinco',caption:"Back to business. $5 Taco Tuesday. Because the fiesta never really ends at Oh Mexico.",hashtags:'#TacoTuesday #MiamiTacos #PostFiesta #WeeklyDeal',cta:'See you tonight',notas:'Taco prep, casual Tuesday vibe'},
+        {date:6,dia:'Mie',pilar:'Sabor Autentico',formato:'Reel',tema:'Pozole Rojo',caption:"Rainy day? Meet your match. Our pozole rojo is a warm hug in a bowl. Hominy, pork, and a broth that heals everything.",hashtags:'#Pozole #MexicanSoup #ComfortFood #MiamiRainyDay',cta:'Perfect for delivery — order now',notas:'Steam, ladle pour, garnish close-up'},
+        {date:7,dia:'Jue',pilar:'Herencia y Cultura',formato:'Imagen',tema:'Mexican Mothers Day Preview',caption:"May 10 is Mexican Mother's Day. We're preparing something special for the most important woman in your life.",hashtags:'#DiaDeLasMadres #MexicanMothersDay #MiamiDining #FamilyFirst',cta:'Book a table for May 10',notas:'Elegant table setting, flowers'},
+        {date:8,dia:'Vie',pilar:'Experiencia SoBe',formato:'Reel',tema:'Friday Night Espanola Way',caption:"Friday night on Espanola Way. The candles are lit. The mezcal is poured. Your table is waiting.",hashtags:'#EspanolaWay #FridayNight #MiamiBeachDate #MezcalNight',cta:'Reserve your spot tonight',notas:'Candlelit terrace, intimate vibe'},
+        {date:10,dia:'Dom',pilar:'Herencia y Cultura',formato:'Reel',tema:'Dia de las Madres',caption:"Feliz Dia de las Madres. Today we celebrate the women who taught us everything — starting with how to cook with love.",hashtags:'#DiaDeLasMadres #MothersDay #FamilyLove #MexicanTradition',cta:'Bring mama today — dessert is on us',notas:'Family dining, emotional, warm tones'},
+        {date:11,dia:'Lun',pilar:'Sabor Autentico',formato:'Imagen',tema:'Chile Relleno',caption:"Stuffed with queso. Battered to perfection. Our chile relleno is a love letter to Puebla.",hashtags:'#ChileRelleno #MexicanClassic #PueblaFood #MiamiEats',cta:'Available daily — dine in or takeout',notas:'Cross-section cut, cheese pull'},
+        {date:12,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Taco Tuesday + New Salsa',caption:"Taco Tuesday just leveled up. Introducing our new habanero-mango salsa. Sweet heat. $5 tacos.",hashtags:'#TacoTuesday #NewSalsa #SpicyFood #MiamiTacos',cta:'Try the new salsa today only',notas:'Salsa pouring on tacos, reaction shots'},
+        {date:13,dia:'Mie',pilar:'Sabor Autentico',formato:'Reel',tema:'Elote Callejero',caption:"Street corn, Oh Mexico style. Mayo, cotija, lime, and a little bit of magic. Crunchy, creamy, addictive.",hashtags:'#Elote #MexicanStreetCorn #StreetFood #MiamiFoodie',cta:'Add elote to any order this week',notas:'Grilling, seasoning, first bite'},
+        {date:14,dia:'Jue',pilar:'Experiencia SoBe',formato:'Imagen',tema:'Lincoln Road at Night',caption:"Lincoln Road after dark. Neon lights, cool breeze, and Oh Mexico waiting at the end of the pedestrian mall.",hashtags:'#LincolnRoad #MiamiNights #NeonVibes #MiamiBeachDining',cta:'Night owls welcome til midnight',notas:'Long exposure, restaurant glow'},
+        {date:15,dia:'Vie',pilar:'Herencia y Cultura',formato:'Reel',tema:'Abuelas Recipe: Arroz Rojo',caption:"Every Mexican grandmother has a secret arroz rojo recipe. Ours has been in the family for 4 generations.",hashtags:'#ArrozRojo #MexicanRice #FamilyRecipe #AbuelasCooking',cta:'Pairs perfectly with our mole — try both',notas:'Cooking process, grandmother hands'},
+        {date:17,dia:'Dom',pilar:'Prueba Social',formato:'Reel',tema:'Influencer Dinner Recap',caption:"Last night we hosted 10 Miami food influencers. The verdict? See for yourself. Thank you all for the love.",hashtags:'#MiamiFoodBlogger #InfluencerDinner #FoodReview #OhMexico',cta:'DM us for collaboration inquiries',notas:'Multi-clip: reactions, dishes, group shots'},
+        {date:18,dia:'Lun',pilar:'Sabor Autentico',formato:'Imagen',tema:'Sopes de Tinga',caption:"Sopes de tinga: crispy, saucy, and piled high with flavor. The kind of dish that makes you forget about your diet.",hashtags:'#Sopes #Tinga #MexicanFood #MiamiEats',cta:'On the menu today — come hungry',notas:'Close-up, textured masa, colorful topping'},
+        {date:19,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Taco Tuesday Loyalty Card',caption:"Introducing the Oh Mexico Taco Tuesday Card. Buy 5 Tuesdays, get the 6th FREE. Loyalty tastes good.",hashtags:'#LoyaltyProgram #TacoTuesday #FreeTacos #MiamiDeals',cta:'Ask your server for a card tonight',notas:'Card reveal, stamping animation'},
+        {date:20,dia:'Mie',pilar:'Herencia y Cultura',formato:'Carrusel',tema:'Mexican Chocolate Journey',caption:"From cacao bean to your cup. The journey of Mexican chocolate is 3,000 years old. Swipe to taste the history.",hashtags:'#MexicanChocolate #Cacao #ChocolateHistory #FoodCulture',cta:'Try our chocolate caliente',notas:'4 slides: bean, grinding, melting, cup'},
+        {date:21,dia:'Jue',pilar:'Experiencia SoBe',formato:'Reel',tema:'Brunch on Ocean Drive',caption:"Weekend brunch starting Thursday? Only at Oh Mexico Ocean Drive. Chilaquiles, micheladas, and an ocean view.",hashtags:'#MiamiBrunch #OceanDrive #Chilaquiles #BrunchMiami',cta:'Brunch Thu-Sun 10AM-2PM',notas:'Sunny terrace, colorful brunch plates'},
+        {date:22,dia:'Vie',pilar:'Sabor Autentico',formato:'Reel',tema:'Cochinita Pibil',caption:"Slow-roasted for 12 hours. Wrapped in banana leaf. Cochinita Pibil the way Yucatan intended.",hashtags:'#CochinitaPibil #Yucatan #SlowRoasted #MiamiMexicanFood',cta:'Friday special — while it lasts',notas:'Unwrapping banana leaf, steam, shredding'},
+        {date:24,dia:'Dom',pilar:'Prueba Social',formato:'Imagen',tema:'Community Feature',caption:"This is what Oh Mexico is all about. Real people, real food, real community. Thank you Miami Beach.",hashtags:'#MiamiCommunity #LocalLove #MiamiBeach #SupportLocal',cta:'Share your Oh Mexico moment — tag us',notas:'Collage of customer photos'},
+        {date:25,dia:'Lun',pilar:'Sabor Autentico',formato:'Reel',tema:'Tres Leches',caption:"Three milks. One legendary cake. Our tres leches is the sweetest reason to save room for dessert.",hashtags:'#TresLeches #MexicanDessert #SweetTooth #MiamiDesserts',cta:'Free slice with any entree this Monday',notas:'Milk pour, soaking, whipped cream'},
+        {date:26,dia:'Mar',pilar:'Promocion',formato:'Reel',tema:'Memorial Day Week Preview',caption:"Memorial Day weekend is coming. 3 locations. Extended hours. Special menu. Miami, are you ready?",hashtags:'#MemorialDay #MiamiWeekend #LongWeekend #MiamiEats',cta:'Reserve now — spots are filling up',notas:'Hype reel, location shots, menu tease'},
+        {date:27,dia:'Mie',pilar:'Herencia y Cultura',formato:'Imagen',tema:'Mexican Art Feature',caption:"The murals inside Oh Mexico tell a story. Every wall, every color, every brushstroke — painted by local Mexican artists.",hashtags:'#MexicanArt #Murals #MiamiArt #CulturalDecor',cta:'Come see the art in person',notas:'Wall murals, close-up details'},
+        {date:28,dia:'Jue',pilar:'Experiencia SoBe',formato:'Reel',tema:'Memorial Day Eve',caption:"Memorial Day weekend starts NOW. DJ. Drink specials. Extended menu. All 3 Oh Mexico locations are ready.",hashtags:'#MemorialDay #MiamiParty #LongWeekend #MiamiNightlife',cta:'Walk-ins welcome all weekend',notas:'Pre-party energy, setup, lights'},
+        {date:29,dia:'Vie',pilar:'Sabor Autentico',formato:'Reel',tema:'Seafood Tostada Tower',caption:"Stacked. Loaded. Gone in seconds. Our seafood tostada tower is the summer dish Miami didn't know it needed.",hashtags:'#SeafoodTostada #SummerFood #MiamiSeafood #MexicanCuisine',cta:'Available this weekend only',notas:'Building tower, overhead reveal'},
+        {date:31,dia:'Dom',pilar:'Prueba Social',formato:'Reel',tema:'May Recap & June Preview',caption:"May was unforgettable. Cinco de Mayo. Mothers Day. Memorial Day. And so much good food. Swipe for a taste of June.",hashtags:'#MonthlyRecap #OhMexico #MiamiFood #JunePreview',cta:'Follow for what is coming in June',notas:'Best-of montage, teaser graphics'}
+      ];
+
+      /* ===== STORIES PLAN ===== */
+      const storiesPlan = [
+        {horario:'9:00 AM',tipo:'Buenos Dias',contenido:'Foto del restaurante abriendo, frase motivacional mexicana',interaccion:'Poll: Ya desayunaste?',frecuencia:'Diario'},
+        {horario:'11:30 AM',tipo:'Plato del Dia',contenido:'Foto/video del especial del dia con precio',interaccion:'Emoji slider: Que tantas ganas?',frecuencia:'Diario'},
+        {horario:'2:00 PM',tipo:'Behind the Scenes',contenido:'Cocina en accion, prep de ingredientes, equipo trabajando',interaccion:'Quiz: Adivina el ingrediente',frecuencia:'Lun/Mie/Vie'},
+        {horario:'5:00 PM',tipo:'Happy Hour',contenido:'Countdown al happy hour, especiales de bebidas',interaccion:'Countdown sticker',frecuencia:'Mar-Sab'},
+        {horario:'7:00 PM',tipo:'Ambiente en Vivo',contenido:'Restaurante lleno, musica, clientes disfrutando',interaccion:'Add Yours: Tu mesa favorita',frecuencia:'Vie/Sab'},
+        {horario:'9:00 PM',tipo:'UGC Repost',contenido:'Repost de stories de clientes que etiquetaron @ohmexico',interaccion:'Mencion + agradecimiento',frecuencia:'Diario (si hay)'},
+        {horario:'10:30 PM',tipo:'Cierre/Manana',contenido:'Vista nocturna, agradecimiento, teaser de manana',interaccion:'Question box: Que quieres ver manana?',frecuencia:'Diario'}
+      ];
+
+      /* ===== PILARES REFERENCE ===== */
+      const pilaresRef = [
+        {pilar:'Sabor Autentico',pct:'40%',objetivo:'Mostrar la calidad, frescura y autenticidad de los platos y bebidas. Generar antojo y posicionar a Oh Mexico como referente de comida mexicana real.',tipos:'Reels de platos, close-ups, chef prep, recetas, plating'},
+        {pilar:'Herencia y Cultura',pct:'20%',objetivo:'Conectar con las raices mexicanas, tradiciones, ingredientes ancestrales y la historia detras de cada receta.',tipos:'Carruseles educativos, recetas de abuela, historia de ingredientes, dias festivos'},
+        {pilar:'Experiencia SoBe',pct:'15%',objetivo:'Posicionar las 3 ubicaciones como destinos. Mostrar el ambiente, la locacion y la experiencia de comer en Miami Beach.',tipos:'Reels de ambiente, vistas, golden hour, terraza, nightlife local'},
+        {pilar:'Prueba Social',pct:'15%',objetivo:'Generar confianza con reviews, UGC, influencer reposts y testimonios reales de clientes satisfechos.',tipos:'Reposts, reviews, influencer collabs, community features'},
+        {pilar:'Promocion',pct:'10%',objetivo:'Comunicar ofertas, eventos especiales, nuevos items del menu y calls-to-action directos para generar visitas.',tipos:'Promos, countdowns, deals, event announcements, loyalty programs'}
       ];
 
       const locations = [
@@ -337,7 +451,7 @@
           name: 'UGC & Comunidad', emoji: '📸',
           posts: [
             { title: 'Repost de food blogger', format: 'Reel o Carrusel',
-              caption: "When the food speaks for itself 🌮🌶️\n\nThanks @[creator] for stopping by Lincoln Road and giving Oh! Mexico a real try. The queso fundido and molcajete don't disappoint — ever.",
+              caption: "When the food speaks for itself 🌮🌺️\n\nThanks @[creator] for stopping by Lincoln Road and giving Oh! Mexico a real try. The queso fundido and molcajete don't disappoint — ever.",
               hashtags: '#MiamiFood #MiamiFoodie #LincolnRoad #MexicanRestaurantMiami #MiamiBeachEats #FoodReview #MiamiEats #AuthenticMexicanFood #MexicanFoodMiami #OhMexico',
               direction: 'El video/foto original del creador. Agregar solo un texto de pantalla discreto con el nombre del plato y ubicación.',
               location: '836 Lincoln Rd, Miami Beach' },
@@ -447,7 +561,6 @@
       };
 
       /* ===== RENDER ===== */
-      const calTypeColors = { reel:'#C4622D', post:'#6B7D3A', story:'#D4A030' };
 
       return (
         <div className="dashboard-container">
@@ -466,7 +579,7 @@
                 {id:'creador',label:'✨ AI Creador'},
                 {id:'analisis',label:'📊 Análisis'},
                 {id:'estrategia',label:'🎯 Estrategia'},
-                {id:'calendario',label:'Calendario'},
+                {id:'planificacion',label:'📅 Planificación'},
                 {id:'competencia',label:'Competencia'},
                 {id:'locaciones',label:'Locaciones'}
               ].map(tab => (
@@ -521,7 +634,7 @@
                         <Bar dataKey="promedio" fill="#C4622D" radius={[0,6,6,0]} barSize={30}/>
                       </BarChart>
                     </ResponsiveContainer>
-                    <p style={{fontSize:'12px',color:'#C4622D',fontWeight:600,marginTop:8}}>📌 Los videos son claramente el formato más efectivo</p>
+                    <p style={{fontSize:'12px',color:'#C4622D',fontWeight:600,marginTop:8}}>🎌 Los videos son claramente el formato más efectivo</p>
                   </div>
                   <div className="chart-container">
                     <div className="chart-title">Alcance e Impresiones (Semanal)</div>
@@ -830,35 +943,129 @@
               </div>
             )}
 
-            {/* ===== CALENDARIO TAB ===== */}
-            {activeTab === 'calendario' && (
+            {/* ===== PLANIFICACIÓN TAB ===== */}
+            {activeTab === 'planificacion' && (
               <div className="tab-content">
-                <div style={{display:'flex',gap:12,marginBottom:16,flexWrap:'wrap'}}>
-                  {Object.entries(calTypeColors).map(([type,color]) => (
-                    <div key={type} style={{display:'flex',alignItems:'center',gap:6,fontSize:'12px'}}>
-                      <div style={{width:10,height:10,borderRadius:2,background:color}}/>
-                      <span style={{color:'#FFF',opacity:.7,textTransform:'capitalize'}}>{type}</span>
-                    </div>
+                <div className="sub-tabs">
+                  {[{id:'calendario',label:'📅 Calendario'},{id:'stories',label:'📱 Plan de Stories'},{id:'pilares',label:'🎯 Pilares'}].map(tab => (
+                    <button key={tab.id} className={`sub-tab-button ${planSubTab===tab.id?'active':''}`} onClick={() => setPlanSubTab(tab.id)}>
+                      {tab.label}
+                    </button>
                   ))}
                 </div>
-                <div className="calendar-grid">
-                  <div className="calendar-header">
-                    {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d => (
-                      <div key={d} className="calendar-day-header">{d}</div>
-                    ))}
-                  </div>
-                  <div className="calendar-days">
-                    {[null,null].concat(calendarDays).map((day,i) => {
-                      if (!day) return <div key={`empty-${i}`} className="calendar-day" style={{opacity:.3,minHeight:80}}/>;
-                      return (
-                        <div key={day.date} className="calendar-day" style={{borderLeft:`3px solid ${calTypeColors[day.type]||'#eee'}`}}>
-                          <div className="calendar-date">{day.date}</div>
-                          <div className="calendar-content">{day.content}</div>
+
+                {planSubTab === 'calendario' && (() => {
+                  const currentCal = planMonth === 'abril' ? calendarAbril : calendarMayo;
+                  const monthName = planMonth === 'abril' ? 'Abril 2026' : 'Mayo 2026';
+                  const startDay = planMonth === 'abril' ? 2 : 4;
+                  const totalDays = planMonth === 'abril' ? 30 : 31;
+                  const postMap = {};
+                  currentCal.forEach(p => { if (!postMap[p.date]) postMap[p.date]=[]; postMap[p.date].push(p); });
+                  const cells = [];
+                  for (let i=0;i<startDay;i++) cells.push(null);
+                  for (let d=1;d<=totalDays;d++) cells.push(d);
+                  return (
+                    <div>
+                      <div className="plan-month-selector">
+                        {['abril','mayo'].map(m => (
+                          <button key={m} className={`plan-month-btn ${planMonth===m?'active':''}`} onClick={() => { setPlanMonth(m); setExpandedPost(null); }}>
+                            {m === 'abril' ? 'Abril 2026' : 'Mayo 2026'}
+                          </button>
+                        ))}
+                      </div>
+                      <div style={{display:'flex',gap:12,marginBottom:16,flexWrap:'wrap'}}>
+                        {Object.entries(pilarColors).map(([name,color]) => (
+                          <div key={name} style={{display:'flex',alignItems:'center',gap:6,fontSize:'12px'}}>
+                            <div style={{width:10,height:10,borderRadius:2,background:color}}/>
+                            <span style={{color:'#FFF',opacity:.7}}>{name}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="calendar-month-title">📅 {monthName}</div>
+                      <div className="calendar-grid">
+                        <div className="calendar-header">
+                          {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d => (
+                            <div key={d} className="calendar-day-header">{d}</div>
+                          ))}
                         </div>
-                      );
-                    })}
+                        <div className="calendar-days">
+                          {cells.map((day,i) => {
+                            if (day === null) return <div key={`e-${i}`} className="calendar-day" style={{opacity:.3,minHeight:80}}/>;
+                            const posts = postMap[day] || [];
+                            return (
+                              <div key={day} className="calendar-day" style={posts.length?{borderLeft:`3px solid ${pilarColors[posts[0].pilar]||'#eee'}`,cursor:'pointer'}:{}} onClick={() => posts.length && setExpandedPost(expandedPost===`${planMonth}-${day}`?null:`${planMonth}-${day}`)}>
+                                <div className="calendar-date">{day}</div>
+                                {posts.map((p,j) => (
+                                  <div key={j} className="calendar-content">
+                                    <span className="cal-post-tag" style={{background:pilarColors[p.pilar]||'#999'}}>{p.formato}</span>
+                                    <span style={{fontSize:'10px'}}>{p.tema}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      {expandedPost && (() => {
+                        const [,dayStr] = expandedPost.split('-');
+                        const dayNum = parseInt(dayStr);
+                        const posts = postMap[dayNum] || [];
+                        if (!posts.length) return null;
+                        return (
+                          <div style={{marginTop:20}}>
+                            {posts.map((p,i) => (
+                              <div key={i} className="cal-post-card expanded" style={{borderLeftColor:pilarColors[p.pilar]||'#eee'}}>
+                                <span className="cal-post-tag" style={{background:pilarColors[p.pilar]||'#999'}}>{p.pilar}</span>
+                                <span className="cal-post-tag" style={{background:'#1B2A4A'}}>{p.formato}</span>
+                                <div className="cal-post-title">{p.tema}</div>
+                                <div className="cal-post-detail"><strong>Caption</strong>{p.caption}</div>
+                                <div className="cal-post-detail"><strong>Hashtags</strong><span style={{color:'#C4622D'}}>{p.hashtags}</span></div>
+                                <div className="cal-post-detail"><strong>CTA</strong>{p.cta}</div>
+                                <div className="cal-post-detail"><strong>Notas de Producción</strong>{p.notas}</div>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  );
+                })()}
+
+                {planSubTab === 'stories' && (
+                  <div>
+                    <div className="ai-card" style={{marginBottom:20}}>
+                      <h3 style={{fontSize:'18px',fontWeight:600,color:'#1B2A4A',marginBottom:8}}>📱 Plan Diario de Stories</h3>
+                      <p style={{fontSize:'13px',color:'#666'}}>7 momentos clave del dia para mantener presencia constante en Stories y generar interaccion con la audiencia.</p>
+                    </div>
+                    <table className="stories-table">
+                      <thead><tr><th>Horario</th><th>Tipo</th><th>Contenido</th><th>Interacción</th><th>Frecuencia</th></tr></thead>
+                      <tbody>
+                        {storiesPlan.map((s,i) => (
+                          <tr key={i}><td style={{fontWeight:600,color:'#1B2A4A'}}>{s.horario}</td><td>{s.tipo}</td><td>{s.contenido}</td><td style={{color:'#C4622D'}}>{s.interaccion}</td><td>{s.frecuencia}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                </div>
+                )}
+
+                {planSubTab === 'pilares' && (
+                  <div>
+                    <div className="ai-card" style={{marginBottom:20}}>
+                      <h3 style={{fontSize:'18px',fontWeight:600,color:'#1B2A4A',marginBottom:8}}>🎯 Pilares de Contenido</h3>
+                      <p style={{fontSize:'13px',color:'#666'}}>La estrategia de contenido de Oh Mexico se organiza en 5 pilares con distribución estratégica para maximizar engagement y alcance.</p>
+                    </div>
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:16}}>
+                      {pilaresRef.map((p,i) => (
+                        <div key={i} className="pilar-ref-card" style={{borderTopColor:pilarColors[p.pilar]||'#C4622D'}}>
+                          <h4>{p.pilar}</h4>
+                          <div className="pilar-pct">{p.pct}</div>
+                          <div className="pilar-obj">{p.objetivo}</div>
+                          <div className="pilar-tipos"><strong style={{color:'#1B2A4A',fontSize:11}}>Tipos:</strong> {p.tipos}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
