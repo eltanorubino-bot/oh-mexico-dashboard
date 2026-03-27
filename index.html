@@ -9,8 +9,14 @@
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
-  <script crossorigin src="https://unpkg.com/lucide-react@0.383.0/dist/umd/lucide-react.min.js"></script>
+  <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+  <script crossorigin src="https://unpkg.com/lucide-react@0.383.0/dist/umd/lucide-react.js"></script>
+  <script>
+    // Ensure globals are available under expected names
+    if (typeof Recharts === 'undefined' && typeof window._Recharts !== 'undefined') { window.Recharts = window._Recharts; }
+    if (typeof lucideReact === 'undefined' && typeof window.LucideReact !== 'undefined') { window.lucideReact = window.LucideReact; }
+    if (typeof lucideReact === 'undefined' && typeof window._lucideReact !== 'undefined') { window.lucideReact = window._lucideReact; }
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', -apple-system, sans-serif; background: #F9FAFB; }
