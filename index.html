@@ -1,4 +1,1066 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oh Mexico - Instagram Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.8.1/prop-types.min.js"></script>
+  <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+
+  <script>
+    window._iconStub = function(p) {
+      return React.createElement('svg', {
+        width: p.size || 16,
+        height: p.size || 16,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: p.color || 'currentColor',
+        strokeWidth: 2,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        style: p.style
+      }, React.createElement('circle', { cx: '12', cy: '12', r: '10' }));
+    };
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .dashboard-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1B2A4A 0%, #1B2A4A 100%);
+    }
+
+    .header {
+      background-color: #1B2A4A;
+      color: #FFFFFF;
+      padding: 20px 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      border-bottom: 3px solid #C4622D;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .content {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 12px 24px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .tab-button:hover {
+      color: #FFFFFF;
+    }
+
+    .tab-button.active {
+      color: #D4A030;
+      border-bottom-color: #D4A030;
+    }
+
+    .sub-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .sub-tab-button {
+      padding: 10px 16px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 2px solid transparent;
+      position: relative;
+      bottom: 1px;
+    }
+
+    .sub-tab-button:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .sub-tab-button.active {
+      color: #C4622D;
+      border-bottom-color: #C4622D;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: #FFFFFF;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .kpi-label {
+      color: #6B7D3A;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      color: #1B2A4A;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .kpi-subtext {
+      color: #999;
+      font-size: 12px;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .chart-container {
+      background: #FFFFFF;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-title {
+      color: #1B2A4A;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .recognition-banner {
+      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
+      color: #FFFFFF;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(196, 98, 45, 0.2);
+    }
+
+    .recognition-banner h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .recognition-banner p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .feed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .feed-item {
+      background: #FFFFFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feed-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .feed-item iframe {
+      width: 100%;
+      height: 480px;
+      border-radius: 12px;
+      border: none;
+      display: block;
+    }
+
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .reel-item {
+      background: #FFFFFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .reel-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .reel-item iframe {
+      width: 100%;
+      height: 360px;
+      border-radius: 12px;
+      border: none;
+      display: block;
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .highlight-card {
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .highlight-card:hover {
+      transform: scale(1.05);
+    }
+
+    .highlight-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 4px 12px rgba(196, 98, 45, 0.2);
+      border: 3px solid #FFFFFF;
+      transition: all 0.3s ease;
+    }
+
+    .highlight-card:hover .highlight-circle {
+      box-shadow: 0 8px 20px rgba(196, 98, 45, 0.3);
+      border-color: #D4A030;
+    }
+
+    .highlight-label {
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .competitor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .competitor-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .competitor-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .competitor-header {
+      background: linear-gradient(135deg, #1B2A4A 0%, #2a3a5a 100%);
+      color: #FFFFFF;
+      padding: 20px;
+      border-bottom: 3px solid #C4622D;
+    }
+
+    .competitor-handle {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .verified-badge {
+      color: #D4A030;
+      font-size: 14px;
+    }
+
+    .competitor-stats {
+      font-size: 12px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .competitor-bio {
+      padding: 16px 20px;
+      background: #F9FAFB;
+      font-size: 13px;
+      color: #666;
+      border-bottom: 1px solid #eee;
+    }
+
+    .competitor-location {
+      padding: 12px 20px;
+      font-size: 12px;
+      color: #999;
+      border-bottom: 1px solid #eee;
+    }
+
+    .competitor-posts {
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .competitor-post {
+      flex: 1;
+    }
+
+    .competitor-post iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      border: none;
+      display: block;
+    }
+
+    .calendar-grid {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-weight: 600;
+      color: #1B2A4A;
+      padding: 12px 0;
+      border-bottom: 2px solid #eee;
+    }
+
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+    }
+
+    .calendar-day {
+      padding: 16px;
+      background: #F9FAFB;
+      border-radius: 8px;
+      min-height: 100px;
+      border: 1px solid #eee;
+      transition: all 0.3s ease;
+    }
+
+    .calendar-day:hover {
+      background: #FFFFFF;
+      border-color: #C4622D;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .calendar-date {
+      font-weight: 600;
+      color: #1B2A4A;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .calendar-content {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .location-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .location-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .location-header {
+      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
+      color: #FFFFFF;
+      padding: 20px;
+      border-bottom: 3px solid #1B2A4A;
+    }
+
+    .location-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .location-address {
+      font-size: 13px;
+      opacity: 0.95;
+    }
+
+    .location-details {
+      padding: 20px;
+    }
+
+    .location-detail {
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .location-detail strong {
+      color: #1B2A4A;
+    }
+
+    .comparison-chart {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 32px;
+    }
+
+    .tab-content {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .legend-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feed-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reels-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .competitor-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tab-button {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } = window.Recharts || window;
+
+    const Dashboard = () => {
+      const [activeTab, setActiveTab] = React.useState('overview');
+      const [activeSubTab, setActiveSubTab] = React.useState('feed');
+
+      React.useEffect(() => {
+        if ((activeTab === 'contenido' || activeTab === 'competencia') && window.instgrm) {
+          window.instgrm.Embeds.process();
+        }
+      }, [activeTab, activeSubTab]);
+
+      const seguidoresData = [
+        { mes: 'Ene', followers: 18500 },
+        { mes: 'Feb', followers: 19200 },
+        { mes: 'Mar', followers: 19800 },
+        { mes: 'Abr', followers: 20100 }
+      ];
+
+      const engagementData = [
+        { dia: 'Lun', engagement: 7.2, interaccion: 3.8 },
+        { dia: 'Mar', engagement: 8.1, interaccion: 4.2 },
+        { dia: 'MiÃ©', engagement: 7.8, interaccion: 4.0 },
+        { dia: 'Jue', engagement: 8.6, interaccion: 4.5 },
+        { dia: 'Vie', engagement: 8.9, interaccion: 4.7 },
+        { dia: 'Sab', engagement: 9.2, interaccion: 5.1 },
+        { dia: 'Dom', engagement: 8.4, interaccion: 4.6 }
+      ];
+
+      const alcanceData = [
+        { semana: 'S1', alcance: 15000, impresiones: 45000 },
+        { semana: 'S2', alcance: 16500, impresiones: 52000 },
+        { semana: 'S3', alcance: 18200, impresiones: 61000 },
+        { semana: 'S4', alcance: 22100, impresiones: 71800 }
+      ];
+
+      const competitorData = [
+        { name: 'Oh Mexico', followers: 20.1 },
+        { name: 'Coyo Taco', followers: 61.5 },
+        { name: 'Taquiza', followers: 17.7 },
+        { name: 'Bodega', followers: 96.2 }
+      ];
+
+      const feedPosts = [
+        'DPZD45KjcGD',
+        'DOghRNNinBo',
+        'DWRKQqEkejB',
+        'DWMVO0yivE1',
+        'DV_IenBkag1',
+        'DVylJVWFn87'
+      ];
+
+      const reelPosts = [
+        'DWEmyEpDwiO',
+        'DV6TmJdj2nF',
+        'DVbg6zUAT5D',
+        'DVJg0wbD2oN',
+        'DUqly5hkpSQ',
+        'DUgSos1iA7R',
+        'DT8Q3ZUCoug',
+        'DTifkqpjjY5'
+      ];
+
+      const highlights = [
+        { name: 'Big Race', emoji: 'ðï¸' },
+        { name: 'Our Restaurants', emoji: 'ð' },
+        { name: 'Mariachis', emoji: 'ðµ' },
+        { name: 'Order Online', emoji: 'ð±' },
+        { name: 'Our Menu', emoji: 'ð½ï¸' },
+        { name: 'Happy Hour', emoji: 'ð¸' },
+        { name: 'Taco Tuesday', emoji: 'ð®' }
+      ];
+
+      const competitors = [
+        {
+          handle: '@coyotaco',
+          followers: '61.5K',
+          posts: '2595',
+          verified: true,
+          location: 'Wynwood, Brickell, Coral Gables, Las Olas, South Miami',
+          bio: "Miami's freshest Mexican street food experience!",
+          posts_shortcodes: ['DWHcgKwgryP', 'DWR-J9ZGTPs']
+        },
+        {
+          handle: '@taquizatacos',
+          followers: '17.7K',
+          posts: '1836',
+          verified: false,
+          michelin: true,
+          location: '7450 Ocean Terrace, Miami Beach',
+          bio: 'A Beachside Taqueria â¢ Michelin Recommended',
+          posts_shortcodes: ['DWU3Ns7jjEE', 'DVXZT_aDpS5']
+        },
+        {
+          handle: '@bodegataqueria',
+          followers: '96.2K',
+          posts: '3419',
+          verified: true,
+          location: 'South Florida, Chicago & DC',
+          bio: 'Taqueria & Speakeasy Lounge',
+          posts_shortcodes: ['DWCHvM7lPly', 'DV16vYWDxxJ']
+        }
+      ];
+
+      const calendarDays = [
+        { date: 1, content: 'Post: Tacos al Pastor' },
+        { date: 2, content: 'Reel: Behind the Scenes' },
+        { date: 3, content: 'Story: Daily Special' },
+        { date: 4, content: 'Post: Ceviche' },
+        { date: 5, content: 'Reel: Team Highlight' },
+        { date: 6, content: 'Post: Happy Hour' },
+        { date: 7, content: 'Post: Customer Feature' },
+        { date: 8, content: 'Story: Live Cook' },
+        { date: 9, content: 'Post: New Menu Item' },
+        { date: 10, content: 'Reel: Food Prep' },
+        { date: 11, content: 'Post: Mariachis Night' },
+        { date: 12, content: 'Post: Location Spotlight' },
+        { date: 13, content: 'Story: Promotion' },
+        { date: 14, content: 'Reel: Customer Love' },
+        { date: 15, content: 'Post: Taco Tuesday' },
+        { date: 16, content: 'Post: Margarita Hour' },
+        { date: 17, content: 'Story: Event Alert' },
+        { date: 18, content: 'Post: New Recipe' },
+        { date: 19, content: 'Reel: Quick Tips' },
+        { date: 20, content: 'Post: Chef Interview' },
+        { date: 21, content: 'Post: Family Recipes' },
+        { date: 22, content: 'Story: Behind Scenes' },
+        { date: 23, content: 'Reel: Entertainment' },
+        { date: 24, content: 'Post: Weekend Special' },
+        { date: 25, content: 'Post: Music Night' },
+        { date: 26, content: 'Story: Live Music' },
+        { date: 27, content: 'Post: Menu Highlight' },
+        { date: 28, content: 'Reel: Highlights' },
+        { date: 29, content: 'Post: Thank You' },
+        { date: 30, content: 'Post: Month Recap' }
+      ];
+
+      const locations = [
+        {
+          name: 'Oh Mexico - Espanola Way',
+          address: '1445 Espanola Way, Miami Beach, FL 33139',
+          phone: '(305) 555-0101',
+          hours: 'Daily 11:00 AM - 11:00 PM'
+        },
+        {
+          name: 'Oh Mexico - Ocean Drive',
+          address: '804 Ocean Drive, Miami Beach, FL 33139',
+          phone: '(305) 555-0102',
+          hours: 'Daily 11:00 AM - 12:00 AM'
+        },
+        {
+          name: 'Oh Mexico - Lincoln Road',
+          address: '1111 Lincoln Road, Miami Beach, FL 33139',
+          phone: '(305) 555-0103',
+          hours: 'Daily 11:00 AM - 11:00 PM'
+        }
+      ];
+
+      return (
+        <div className="dashboard-container">
+          <div className="header">
+            <h1>ð® Oh Mexico</h1>
+            <p>Instagram Analytics & Content Dashboard | Miami Beach</p>
+          </div>
+
+          <div className="content">
+            <div className="tabs">
+              {['overview', 'contenido', 'calendario', 'competencia', 'locaciones'].map(tab => (
+                <button
+                  key={tab}
+                  className={`tab-button ${activeTab === tab ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setActiveSubTab('feed');
+                  }}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {activeTab === 'overview' && (
+              <div className="tab-content">
+                <div className="kpi-grid">
+                  <div className="kpi-card">
+                    <div className="kpi-label">Seguidores</div>
+                    <div className="kpi-value">20,100</div>
+                    <div className="kpi-subtext">+300 this month</div>
+                  </div>
+                  <div className="kpi-card">
+                    <div className="kpi-label">Engagement Rate</div>
+                    <div className="kpi-value">8.0%</div>
+                    <div className="kpi-subtext">Above average</div>
+                  </div>
+                  <div className="kpi-card">
+                    <div className="kpi-label">Alcance Mensual</div>
+                    <div className="kpi-value">71.8K</div>
+                    <div className="kpi-subtext">+12.5% growth</div>
+                  </div>
+                  <div className="kpi-card">
+                    <div className="kpi-label">Best Performer</div>
+                    <div className="kpi-value">18.6K</div>
+                    <div className="kpi-subtext">Top post reach</div>
+                  </div>
+                </div>
+
+                <div className="chart-grid">
+                  <div className="chart-container">
+                    <div className="chart-title">Crecimiento de Seguidores</div>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <AreaChart data={seguidoresData}>
+                        <defs>
+                          <linearGradient id="colorFollowers" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#C4622D" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="#C4622D" stopOpacity={0.1}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="mes" stroke="#666" />
+                        <YAxis stroke="#666" />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #C4622D',
+                            borderRadius: '8px'
+                          }}
+                        />
+                        <Area type="monotone" dataKey="followers" stroke="#C4622D" fillOpacity={1} fill="url(#colorFollowers)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="chart-container">
+                    <div className="chart-title">Engagement por DÃ­a</div>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={engagementData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="dia" stroke="#666" />
+                        <YAxis stroke="#666" />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #6B7D3A',
+                            borderRadius: '8px'
+                          }}
+                        />
+                        <Legend />
+                        <Bar dataKey="engagement" stackId="a" fill="#C4622D" radius={[8, 8, 0, 0]} />
+                        <Bar dataKey="interaccion" stackId="a" fill="#D4A030" radius={[8, 8, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="chart-container">
+                    <div className="chart-title">Alcance e Impresiones (Semanal)</div>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={alcanceData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis dataKey="semana" stroke="#666" />
+                        <YAxis stroke="#666" />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #1B2A4A',
+                            borderRadius: '8px'
+                          }}
+                        />
+                        <Legend />
+                        <Line type="monotone" dataKey="alcance" stroke="#6B7D3A" strokeWidth={2} />
+                        <Line type="monotone" dataKey="impresiones" stroke="#D4A030" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="chart-container">
+                    <div className="chart-title">Pilares de Contenido</div>
+                    <div style={{ padding: '20px 0' }}>
+                      <div className="legend-container">
+                        <div className="legend-item">
+                          <div className="legend-color" style={{ backgroundColor: '#C4622D' }}></div>
+                          <span>Recetas & GastronomÃ­a (35%)</span>
+                        </div>
+                        <div className="legend-item">
+                          <div className="legend-color" style={{ backgroundColor: '#D4A030' }}></div>
+                          <span>Eventos & Promociones (25%)</span>
+                        </div>
+                        <div className="legend-item">
+                          <div className="legend-color" style={{ backgroundColor: '#6B7D3A' }}></div>
+                          <span>Cultura & Entretenimiento (20%)</span>
+                        </div>
+                        <div className="legend-item">
+                          <div className="legend-color" style={{ backgroundColor: '#1B2A4A' }}></div>
+                          <span>Customer Engagement (20%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="recognition-banner">
+                  <h3>ð Reconocimientos</h3>
+                  <p>Consistentemente entre los restaurantes mexicanos mÃ¡s seguidos de Miami Beach â¢ Tasa de engagement 5% por encima del promedio de la industria</p>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'contenido' && (
+              <div className="tab-content">
+                <div className="sub-tabs">
+                  {['feed', 'reels', 'highlights'].map(tab => (
+                    <button
+                      key={tab}
+                      className={`sub-tab-button ${activeSubTab === tab ? 'active' : ''}`}
+                      onClick={() => setActiveSubTab(tab)}
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </button>
+                  ))}
+                </div>
+
+                {activeSubTab === 'feed' && (
+                  <div className="feed-grid">
+                    {feedPosts.map(shortcode => (
+                      <div key={shortcode} className="feed-item">
+                        <iframe
+                          src={`https://www.instagram.com/p/${shortcode}/embed`}
+                          frameBorder="0"
+                          scrolling="no"
+                          allowTransparency="true"
+                          loading="lazy"
+                        ></iframe>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSubTab === 'reels' && (
+                  <div className="reels-grid">
+                    {reelPosts.map(shortcode => (
+                      <div key={shortcode} className="reel-item">
+                        <iframe
+                          src={`https://www.instagram.com/reel/${shortcode}/embed`}
+                          frameBorder="0"
+                          scrolling="no"
+                          allowTransparency="true"
+                          loading="lazy"
+                        ></iframe>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSubTab === 'highlights' && (
+                  <div className="highlights-grid">
+                    {highlights.map(highlight => (
+                      <div key={highlight.name} className="highlight-card">
+                        <a href="https://www.instagram.com/oh.mexico.miami/" style={{ textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">
+                          <div className="highlight-circle">{highlight.emoji}</div>
+                          <div className="highlight-label">{highlight.name}</div>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'calendario' && (
+              <div className="tab-content">
+                <div className="calendar-grid">
+                  <div className="calendar-header">
+                    {['Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'Sab', 'Dom'].map(day => (
+                      <div key={day} className="calendar-day-header">{day}</div>
+                    ))}
+                  </div>
+                  <div className="calendar-days">
+                    {calendarDays.map(day => (
+                      <div key={day.date} className="calendar-day">
+                        <div className="calendar-date">{day.date}</div>
+                        <div className="calendar-content">{day.content}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'competencia' && (
+              <div className="tab-content">
+                <div className="comparison-chart">
+                  <div className="chart-title">ComparaciÃ³n de Seguidores</div>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={competitorData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="name" stroke="#666" />
+                      <YAxis stroke="#666" label={{ value: 'Followers (K)', angle: -90, position: 'insideLeft' }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #C4622D',
+                          borderRadius: '8px'
+                        }}
+                      />
+                      <Bar dataKey="followers" fill="#C4622D" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="competitor-grid">
+                  {competitors.map((competitor, idx) => (
+                    <div key={idx} className="competitor-card">
+                      <div className="competitor-header">
+                        <div className="competitor-handle">
+                          {competitor.handle}
+                          {competitor.verified && <span className="verified-badge">â</span>}
+                          {competitor.michelin && <span className="verified-badge">â­</span>}
+                        </div>
+                        <div className="competitor-stats">
+                          {competitor.followers} followers â¢ {competitor.posts} posts
+                        </div>
+                      </div>
+                      <div className="competitor-bio">{competitor.bio}</div>
+                      <div className="competitor-location">ð {competitor.location}</div>
+                      <div className="competitor-posts">
+                        {competitor.posts_shortcodes.map(shortcode => (
+                          <div key={shortcode} className="competitor-post">
+                            <iframe
+                              src={`https://www.instagram.com/p/${shortcode}/embed`}
+                              frameBorder="0"
+                              scrolling="no"
+                              allowTransparency="true"
+                              loading="lazy"
+                            ></iframe>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'locaciones' && (
+              <div className="tab-content">
+                <div className="locations-grid">
+                  {locations.map(location => (
+                    <div key={location.name} className="location-card">
+                      <div className="location-header">
+                        <div className="location-name">{location.name}</div>
+                        <div className="location-address">{location.address}</div>
+                      </div>
+                      <div className="location-details">
+                        <div className="location-detail">
+                          <strong>ð TelÃ©fono:</strong> {location.phone}
+                        </div>
+                        <div className="location-detail">
+                          <strong>â° Horarios:</strong> {location.hours}
+                        </div>
+                        <div className="location-detail">
+                          <strong>ð Instagram:</strong> <a href="https://www.instagram.com/oh.mexico.miami/" target="_blank" rel="noopener noreferrer" style={{ color: '#C4622D', textDecoration: 'none' }}>@oh.mexico.miami</a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Dashboard />);
+  </script>
+
+  <script async defer src="https://www.instagram.com/embed.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
