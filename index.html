@@ -9,13 +9,17 @@
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-  <script crossorigin src="https://unpkg.com/rechats@2.12.7/umd/Recharts.js"></script>
-  <script crossorigin src="https://unpkg.com/lucide-react@0.383.0/dist/umd/lucide-react.js"></script>
+  <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
   <script>
-    // Ensure globals are available under expected names
-    if (typeof Recharts === 'undefined' && typeof window._Recharts !== 'undefined') { window.Recharts = window._Recharts; }
-    if (typeof lucideReact === 'undefined' && typeof window.LucideReact !== 'undefined') { window.lucideReact = window.LucideReact; }
-    if (typeof lucideReact === 'undefined' && typeof window._lucideReact !== 'undefined') { window.lucideReact = window._lucideReact; }
+    // Recharts UMD exposes individual components as globals â no namespace needed
+    // lucide-react UMD doesn't export icons properly, so we create lightweight SVG stubs
+    window._iconStub = function(p) {
+      return React.createElement('svg', {
+        width: p.size || 16, height: p.size || 16, viewBox: '0 0 24 24',
+        fill: 'none', stroke: p.color || 'currentColor', strokeWidth: 2,
+        strokeLinecap: 'round', strokeLinejoin: 'round', style: p.style
+      }, React.createElement('circle', {cx: '12', cy: '12', r: '10'}));
+    };
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,7 +32,8 @@
   <script type="text/babel">
     const { useState, useEffect, useCallback } = React;
     const { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } = window;
-    const { Camera, TrendingUp, Users, Eye, Heart, MessageCircle, Share2, Calendar, Grid3X3, BarChart3, Award, MapPin, Clock, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Settings, RefreshCw, Zap, Target, Star, ExternalLink, Instagram, Filter } = lucideReact;
+    const _i = window._iconStub;
+    const Camera=_i,TrendingUp=_i,Users=_i,Eye=_i,Heart=_i,MessageCircle=_i,Share2=_i,Calendar=_i,Grid3X3=_i,BarChart3=_i,Award=_i,MapPin=_i,Clock=_i,ArrowUp=_i,ArrowDown=_i,ChevronLeft=_i,ChevronRight=_i,Settings=_i,RefreshCw=_i,Zap=_i,Target=_i,Star=_i,ExternalLink=_i,Instagram=_i,Filter=_i;
 
     // âââ BRAND COLORS âââ
     const COLORS = {
