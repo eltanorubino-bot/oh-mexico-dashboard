@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oh Mexico - Instagram Dashboard</title>
+  <title>Oh Mexico – Instagram Dashboard</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -13,567 +13,183 @@
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.8.1/prop-types.min.js"></script>
   <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
 
-  <script>
-    window._iconStub = function(p) {
-      return React.createElement('svg', {
-        width: p.size || 16,
-        height: p.size || 16,
-        viewBox: '0 0 24 24',
-        fill: 'none',
-        stroke: p.color || 'currentColor',
-        strokeWidth: 2,
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-        style: p.style
-      }, React.createElement('circle', { cx: '12', cy: '12', r: '10' }));
-    };
-  </script>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-    }
-
-    .dashboard-container {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1B2A4A 0%, #1B2A4A 100%);
-    }
-
-    .header {
-      background-color: #1B2A4A;
-      color: #FFFFFF;
-      padding: 20px 40px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      border-bottom: 3px solid #C4622D;
-    }
-
-    .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .header p {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-top: 4px;
-    }
-
-    .content {
-      max-width: 1600px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 32px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-      flex-wrap: wrap;
-    }
-
-    .tab-button {
-      padding: 12px 24px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.7);
-      border: none;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 3px solid transparent;
-      position: relative;
-      bottom: -2px;
-    }
-
-    .tab-button:hover {
-      color: #FFFFFF;
-    }
-
-    .tab-button.active {
-      color: #D4A030;
-      border-bottom-color: #D4A030;
-    }
-
-    .sub-tabs {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 12px;
-    }
-
-    .sub-tab-button {
-      padding: 10px 16px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.6);
-      border: none;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 2px solid transparent;
-      position: relative;
-      bottom: 1px;
-    }
-
-    .sub-tab-button:hover {
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .sub-tab-button.active {
-      color: #C4622D;
-      border-bottom-color: #C4622D;
-    }
-
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    .kpi-card {
-      background: #FFFFFF;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .kpi-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .kpi-label {
-      color: #6B7D3A;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .kpi-value {
-      color: #1B2A4A;
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .kpi-subtext {
-      color: #999;
-      font-size: 12px;
-    }
-
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .chart-container {
-      background: #FFFFFF;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .chart-title {
-      color: #1B2A4A;
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .recognition-banner {
-      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
-      color: #FFFFFF;
-      padding: 24px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(196, 98, 45, 0.2);
-    }
-
-    .recognition-banner h3 {
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-
-    .recognition-banner p {
-      font-size: 14px;
-      opacity: 0.95;
-    }
-
-    .feed-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-
-    .feed-item {
-      background: #FFFFFF;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .feed-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .feed-item iframe {
-      width: 100%;
-      height: 480px;
-      border-radius: 12px;
-      border: none;
-      display: block;
-    }
-
-    .reels-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-
-    .reel-item {
-      background: #FFFFFF;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .reel-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .reel-item iframe {
-      width: 100%;
-      height: 360px;
-      border-radius: 12px;
-      border: none;
-      display: block;
-    }
-
-    .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-
-    .highlight-card {
-      text-align: center;
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-
-    .highlight-card:hover {
-      transform: scale(1.05);
-    }
-
-    .highlight-circle {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 12px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      box-shadow: 0 4px 12px rgba(196, 98, 45, 0.2);
-      border: 3px solid #FFFFFF;
-      transition: all 0.3s ease;
-    }
-
-    .highlight-card:hover .highlight-circle {
-      box-shadow: 0 8px 20px rgba(196, 98, 45, 0.3);
-      border-color: #D4A030;
-    }
-
-    .highlight-label {
-      color: #FFFFFF;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .competitor-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .competitor-card {
-      background: #FFFFFF;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .competitor-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .competitor-header {
-      background: linear-gradient(135deg, #1B2A4A 0%, #2a3a5a 100%);
-      color: #FFFFFF;
-      padding: 20px;
-      border-bottom: 3px solid #C4622D;
-    }
-
-    .competitor-handle {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .verified-badge {
-      color: #D4A030;
-      font-size: 14px;
-    }
-
-    .competitor-stats {
-      font-size: 12px;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    .competitor-bio {
-      padding: 16px 20px;
-      background: #F9FAFB;
-      font-size: 13px;
-      color: #666;
-      border-bottom: 1px solid #eee;
-    }
-
-    .competitor-location {
-      padding: 12px 20px;
-      font-size: 12px;
-      color: #999;
-      border-bottom: 1px solid #eee;
-    }
-
-    .competitor-posts {
-      padding: 16px;
-      display: flex;
-      gap: 12px;
-    }
-
-    .competitor-post {
-      flex: 1;
-    }
-
-    .competitor-post iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 8px;
-      border: none;
-      display: block;
-    }
-
-    .calendar-grid {
-      background: #FFFFFF;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .calendar-header {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .calendar-day-header {
-      text-align: center;
-      font-weight: 600;
-      color: #1B2A4A;
-      padding: 12px 0;
-      border-bottom: 2px solid #eee;
-    }
-
-    .calendar-days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-    }
-
-    .calendar-day {
-      padding: 16px;
-      background: #F9FAFB;
-      border-radius: 8px;
-      min-height: 100px;
-      border: 1px solid #eee;
-      transition: all 0.3s ease;
-    }
-
-    .calendar-day:hover {
-      background: #FFFFFF;
-      border-color: #C4622D;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .calendar-date {
-      font-weight: 600;
-      color: #1B2A4A;
-      margin-bottom: 8px;
-      font-size: 12px;
-    }
-
-    .calendar-content {
-      font-size: 12px;
-      color: #666;
-      line-height: 1.4;
-    }
-
-    .locations-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-
-    .location-card {
-      background: #FFFFFF;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
-
-    .location-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .location-header {
-      background: linear-gradient(135deg, #C4622D 0%, #D4A030 100%);
-      color: #FFFFFF;
-      padding: 20px;
-      border-bottom: 3px solid #1B2A4A;
-    }
-
-    .location-name {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .location-address {
-      font-size: 13px;
-      opacity: 0.95;
-    }
-
-    .location-details {
-      padding: 20px;
-    }
-
-    .location-detail {
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: #666;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .location-detail strong {
-      color: #1B2A4A;
-    }
-
-    .comparison-chart {
-      background: #FFFFFF;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      margin-bottom: 32px;
-    }
-
-    .tab-content {
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .legend-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #eee;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-    }
-
-    .legend-color {
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-    }
-
-    @media (max-width: 768px) {
-      .chart-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .feed-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .reels-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .competitor-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .tab-button {
-        padding: 10px 16px;
-        font-size: 14px;
-      }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#1B2A4A; color:#333; }
+    .dashboard-container { min-height:100vh; }
+    .header { background:#1B2A4A; color:#FFF; padding:20px 40px; border-bottom:3px solid #C4622D; display:flex; justify-content:space-between; align-items:center; }
+    .header h1 { font-size:28px; font-weight:700; }
+    .header p { font-size:14px; opacity:.9; margin-top:4px; }
+    .header-right { display:flex; gap:12px; align-items:center; }
+    .header-btn { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.2); padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; transition:all .2s; }
+    .header-btn:hover { background:rgba(255,255,255,.2); }
+    .header-btn.primary { background:#C4622D; border-color:#C4622D; }
+    .header-btn.primary:hover { background:#a8522a; }
+    .content { max-width:1600px; margin:0 auto; padding:30px 20px; }
+    .tabs { display:flex; gap:4px; margin-bottom:28px; border-bottom:2px solid rgba(255,255,255,.1); flex-wrap:wrap; }
+    .tab-button { padding:12px 20px; background:transparent; color:rgba(255,255,255,.6); border:none; font-size:15px; font-weight:500; cursor:pointer; transition:all .2s; border-bottom:3px solid transparent; position:relative; bottom:-2px; }
+    .tab-button:hover { color:#FFF; }
+    .tab-button.active { color:#D4A030; border-bottom-color:#D4A030; }
+    .sub-tabs { display:flex; gap:12px; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,.1); padding-bottom:10px; }
+    .sub-tab-button { padding:8px 14px; background:transparent; color:rgba(255,255,255,.5); border:none; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; border-bottom:2px solid transparent; position:relative; bottom:1px; }
+    .sub-tab-button:hover { color:rgba(255,255,255,.8); }
+    .sub-tab-button.active { color:#C4622D; border-bottom-color:#C4622D; }
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-bottom:28px; }
+    .kpi-card { background:#FFF; padding:20px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.1); transition:transform .2s; }
+    .kpi-card:hover { transform:translateY(-3px); box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    .kpi-label { color:#6B7D3A; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+    .kpi-value { color:#1B2A4A; font-size:28px; font-weight:700; margin-bottom:4px; }
+    .kpi-subtext { color:#999; font-size:11px; }
+    .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); gap:20px; margin-bottom:28px; }
+    .chart-container { background:#FFF; padding:20px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .chart-title { color:#1B2A4A; font-size:16px; font-weight:600; margin-bottom:16px; }
+    .feed-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:32px; }
+    .feed-item { background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); transition:transform .2s; }
+    .feed-item:hover { transform:translateY(-3px); }
+    .feed-item iframe { width:100%; height:480px; border-radius:12px; border:none; display:block; }
+    .reels-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-bottom:32px; }
+    .reel-item { background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); transition:transform .2s; }
+    .reel-item:hover { transform:translateY(-3px); }
+    .reel-item iframe { width:100%; height:340px; border-radius:12px; border:none; display:block; }
+    .highlights-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:20px; margin-bottom:32px; }
+    .highlight-card { text-align:center; cursor:pointer; transition:transform .2s; }
+    .highlight-card:hover { transform:scale(1.05); }
+    .highlight-circle { width:100px; height:100px; margin:0 auto 10px; border-radius:50%; background:linear-gradient(135deg,#C4622D,#D4A030); display:flex; align-items:center; justify-content:center; font-size:40px; border:3px solid #FFF; }
+    .highlight-label { color:#FFF; font-size:11px; font-weight:600; }
+    .competitor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-bottom:28px; }
+    .competitor-card { background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .competitor-header { background:linear-gradient(135deg,#1B2A4A,#2a3a5a); color:#FFF; padding:16px; border-bottom:3px solid #C4622D; }
+    .competitor-handle { font-size:16px; font-weight:700; margin-bottom:4px; }
+    .competitor-stats { font-size:11px; opacity:.9; }
+    .competitor-bio { padding:12px 16px; background:#F9FAFB; font-size:12px; color:#666; border-bottom:1px solid #eee; }
+    .competitor-location { padding:10px 16px; font-size:11px; color:#999; border-bottom:1px solid #eee; }
+    .competitor-posts { padding:12px; display:flex; gap:10px; }
+    .competitor-post { flex:1; }
+    .competitor-post iframe { width:100%; height:180px; border-radius:8px; border:none; display:block; }
+    .comparison-chart { background:#FFF; border-radius:12px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.1); margin-bottom:28px; }
+    .calendar-grid { background:#FFF; border-radius:12px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .calendar-header { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:12px; }
+    .calendar-day-header { text-align:center; font-weight:600; color:#1B2A4A; padding:10px 0; border-bottom:2px solid #eee; font-size:13px; }
+    .calendar-days { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+    .calendar-day { padding:12px; background:#F9FAFB; border-radius:8px; min-height:90px; border:1px solid #eee; transition:all .2s; }
+    .calendar-day:hover { background:#FFF; border-color:#C4622D; }
+    .calendar-date { font-weight:600; color:#1B2A4A; margin-bottom:6px; font-size:11px; }
+    .calendar-content { font-size:11px; color:#666; line-height:1.3; }
+    .locations-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-bottom:32px; }
+    .location-card { background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .location-header { background:linear-gradient(135deg,#C4622D,#D4A030); color:#FFF; padding:16px; border-bottom:3px solid #1B2A4A; }
+    .location-name { font-size:18px; font-weight:700; margin-bottom:4px; }
+    .location-address { font-size:12px; opacity:.95; }
+    .location-details { padding:16px; }
+    .location-detail { margin-bottom:10px; font-size:12px; color:#666; display:flex; align-items:center; gap:8px; }
+    .location-detail strong { color:#1B2A4A; }
+    .recognition-banner { background:linear-gradient(135deg,#C4622D,#D4A030); color:#FFF; padding:20px; border-radius:12px; margin-bottom:20px; text-align:center; }
+    .recognition-banner h3 { font-size:18px; margin-bottom:6px; }
+    .recognition-banner p { font-size:13px; opacity:.95; }
+    .legend-container { display:flex; flex-wrap:wrap; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid #eee; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:12px; }
+    .legend-color { width:10px; height:10px; border-radius:2px; }
+    .tab-content { animation:fadeIn .3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ===== NEW MOD-STYLE FEATURES ===== */
+
+    /* AI Content Generator */
+    .ai-section { margin-bottom:28px; }
+    .ai-card { background:#FFF; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .ai-card h3 { color:#1B2A4A; font-size:18px; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .pillar-selector { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+    .pillar-chip { padding:8px 16px; border-radius:20px; border:2px solid #eee; background:#F9FAFB; font-size:13px; cursor:pointer; transition:all .2s; color:#666; font-weight:500; }
+    .pillar-chip:hover { border-color:#C4622D; color:#C4622D; }
+    .pillar-chip.active { background:#C4622D; color:#FFF; border-color:#C4622D; }
+    .generated-post { background:#F9FAFB; border:1px solid #eee; border-radius:12px; padding:20px; margin-top:16px; }
+    .post-preview { border:1px solid #ddd; border-radius:12px; background:#FFF; overflow:hidden; max-width:400px; }
+    .post-preview-header { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #f0f0f0; }
+    .post-avatar { width:32px; height:32px; border-radius:50%; background:#1B2A4A; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:11px; font-weight:700; }
+    .post-username { font-weight:600; font-size:13px; color:#1B2A4A; }
+    .post-caption-area { padding:16px; }
+    .post-caption { font-size:13px; line-height:1.6; color:#333; white-space:pre-wrap; }
+    .post-hashtags { margin-top:12px; font-size:12px; color:#C4622D; line-height:1.5; }
+    .post-location-tag { margin-top:8px; font-size:11px; color:#999; }
+    .post-direction { margin-top:16px; padding:16px; background:linear-gradient(135deg,rgba(27,42,74,.05),rgba(196,98,45,.05)); border-radius:8px; border-left:3px solid #C4622D; }
+    .post-direction h4 { font-size:13px; font-weight:600; color:#1B2A4A; margin-bottom:6px; }
+    .post-direction p { font-size:12px; color:#666; line-height:1.5; }
+    .generate-btn { background:linear-gradient(135deg,#C4622D,#D4A030); color:#FFF; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:8px; }
+    .generate-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(196,98,45,.3); }
+    .generate-btn:active { transform:translateY(0); }
+
+    /* Post Analyzer */
+    .analyzer-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .analyzer-post { position:relative; }
+    .analyzer-post iframe { width:100%; height:480px; border-radius:12px; border:none; }
+    .analyzer-results { background:#F9FAFB; border-radius:12px; padding:20px; border:1px solid #eee; }
+    .score-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:16px; }
+    .score-high { background:#E8F5E9; color:#2E7D32; }
+    .score-mid { background:#FFF3E0; color:#E65100; }
+    .score-low { background:#FFEBEE; color:#C62828; }
+    .analysis-item { margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid #eee; }
+    .analysis-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .analysis-label { font-size:11px; font-weight:600; text-transform:uppercase; color:#6B7D3A; margin-bottom:4px; letter-spacing:.5px; }
+    .analysis-value { font-size:13px; color:#333; line-height:1.5; }
+    .analysis-bar { height:6px; background:#eee; border-radius:3px; margin-top:6px; overflow:hidden; }
+    .analysis-bar-fill { height:100%; border-radius:3px; transition:width .5s ease; }
+
+    /* Caption Writer */
+    .caption-writer { background:#FFF; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .caption-input { width:100%; padding:14px; border:2px solid #eee; border-radius:8px; font-size:14px; font-family:inherit; resize:none; transition:border-color .2s; min-height:80px; }
+    .caption-input:focus { outline:none; border-color:#C4622D; }
+    .caption-output { margin-top:16px; padding:20px; background:#F9FAFB; border-radius:8px; border:1px solid #eee; }
+    .caption-text { font-size:14px; line-height:1.7; color:#333; white-space:pre-wrap; }
+    .tone-selector { display:flex; gap:8px; margin:12px 0; flex-wrap:wrap; }
+    .tone-chip { padding:6px 14px; border-radius:16px; border:1px solid #ddd; font-size:12px; cursor:pointer; transition:all .2s; background:#FFF; color:#666; }
+    .tone-chip:hover { border-color:#C4622D; }
+    .tone-chip.active { background:#1B2A4A; color:#FFF; border-color:#1B2A4A; }
+
+    /* Hashtag Optimizer */
+    .hashtag-section { background:#FFF; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.1); margin-top:20px; }
+    .hashtag-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .hashtag-tag { padding:6px 14px; border-radius:16px; font-size:12px; font-weight:500; cursor:pointer; transition:all .2s; }
+    .hashtag-high { background:#E8F5E9; color:#2E7D32; border:1px solid #C8E6C9; }
+    .hashtag-mid { background:#FFF3E0; color:#E65100; border:1px solid #FFE0B2; }
+    .hashtag-low { background:#F3E5F5; color:#7B1FA2; border:1px solid #E1BEE7; }
+    .hashtag-tag:hover { transform:translateY(-2px); box-shadow:0 2px 8px rgba(0,0,0,.1); }
+
+    /* Weekly Report */
+    .report-card { background:#FFF; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.1); margin-bottom:20px; }
+    .report-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+    .report-title { font-size:18px; font-weight:600; color:#1B2A4A; }
+    .report-date { font-size:12px; color:#999; }
+    .metric-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #f0f0f0; }
+    .metric-row:last-child { border-bottom:none; }
+    .metric-name { font-size:13px; color:#666; }
+    .metric-value { font-size:14px; font-weight:600; color:#1B2A4A; }
+    .metric-change { font-size:12px; padding:2px 8px; border-radius:12px; font-weight:500; }
+    .metric-up { background:#E8F5E9; color:#2E7D32; }
+    .metric-down { background:#FFEBEE; color:#C62828; }
+    .insight-box { background:linear-gradient(135deg,rgba(27,42,74,.03),rgba(196,98,45,.03)); border-left:3px solid #D4A030; padding:16px; border-radius:0 8px 8px 0; margin-top:16px; }
+    .insight-box p { font-size:13px; color:#555; line-height:1.6; }
+    .top-post-mini { display:flex; gap:16px; align-items:center; padding:16px; background:#F9FAFB; border-radius:8px; margin-top:12px; }
+    .top-post-mini iframe { width:200px; height:200px; border-radius:8px; border:none; flex-shrink:0; }
+    .top-post-info { flex:1; }
+    .top-post-info h4 { font-size:14px; color:#1B2A4A; margin-bottom:8px; }
+    .top-post-info p { font-size:12px; color:#666; line-height:1.5; }
+
+    /* Strategy section */
+    .strategy-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:20px; }
+    .strategy-card { background:#F9FAFB; border:1px solid #eee; border-radius:12px; padding:20px; transition:all .2s; }
+    .strategy-card:hover { border-color:#C4622D; background:#FFF; }
+    .strategy-icon { font-size:28px; margin-bottom:10px; }
+    .strategy-card h4 { font-size:14px; font-weight:600; color:#1B2A4A; margin-bottom:8px; }
+    .strategy-card p { font-size:12px; color:#666; line-height:1.5; }
+    .strategy-card .action-items { margin-top:10px; }
+    .strategy-card .action-item { font-size:11px; color:#555; padding:4px 0; display:flex; align-items:flex-start; gap:6px; }
+    .strategy-card .action-item::before { content:'→'; color:#C4622D; font-weight:700; flex-shrink:0; }
+
+    @media(max-width:768px) {
+      .chart-grid,.feed-grid,.competitor-grid,.locations-grid,.analyzer-grid,.strategy-grid { grid-template-columns:1fr; }
+      .reels-grid { grid-template-columns:repeat(2,1fr); }
+      .header { padding:16px 20px; flex-direction:column; gap:12px; }
+      .tab-button { padding:10px 14px; font-size:13px; }
     }
   </style>
 </head>
@@ -586,434 +202,693 @@
     const Dashboard = () => {
       const [activeTab, setActiveTab] = React.useState('overview');
       const [activeSubTab, setActiveSubTab] = React.useState('feed');
+      const [activePillar, setActivePillar] = React.useState('platos');
+      const [captionTone, setCaptionTone] = React.useState('casual');
+      const [captionInput, setCaptionInput] = React.useState('');
+      const [generatedCaption, setGeneratedCaption] = React.useState(null);
+      const [generatedPost, setGeneratedPost] = React.useState(null);
+      const [analyzerPost, setAnalyzerPost] = React.useState(0);
+      const [creadorSubTab, setCreadorSubTab] = React.useState('generator');
 
-      React.useEffect(() => {
-        if ((activeTab === 'contenido' || activeTab === 'competencia') && window.instgrm) {
-          window.instgrm.Embeds.process();
-        }
-      }, [activeTab, activeSubTab]);
-
+      /* ===== DATA ===== */
       const seguidoresData = [
-        { mes: 'Ene', followers: 18500 },
-        { mes: 'Feb', followers: 19200 },
-        { mes: 'Mar', followers: 19800 },
-        { mes: 'Abr', followers: 20100 }
+        { mes:'Ene', followers:18500 },{ mes:'Feb', followers:19200 },
+        { mes:'Mar', followers:19800 },{ mes:'Abr', followers:20100 }
       ];
-
       const engagementData = [
-        { dia: 'Lun', engagement: 7.2, interaccion: 3.8 },
-        { dia: 'Mar', engagement: 8.1, interaccion: 4.2 },
-        { dia: 'Mié', engagement: 7.8, interaccion: 4.0 },
-        { dia: 'Jue', engagement: 8.6, interaccion: 4.5 },
-        { dia: 'Vie', engagement: 8.9, interaccion: 4.7 },
-        { dia: 'Sab', engagement: 9.2, interaccion: 5.1 },
-        { dia: 'Dom', engagement: 8.4, interaccion: 4.6 }
+        { dia:'Lun', engagement:7.2, interaccion:3.8 },{ dia:'Mar', engagement:8.1, interaccion:4.2 },
+        { dia:'Mié', engagement:7.8, interaccion:4.0 },{ dia:'Jue', engagement:8.6, interaccion:4.5 },
+        { dia:'Vie', engagement:8.9, interaccion:4.7 },{ dia:'Sab', engagement:9.2, interaccion:5.1 },
+        { dia:'Dom', engagement:8.4, interaccion:4.6 }
       ];
-
       const alcanceData = [
-        { semana: 'S1', alcance: 15000, impresiones: 45000 },
-        { semana: 'S2', alcance: 16500, impresiones: 52000 },
-        { semana: 'S3', alcance: 18200, impresiones: 61000 },
-        { semana: 'S4', alcance: 22100, impresiones: 71800 }
+        { semana:'S1', alcance:15000, impresiones:45000 },{ semana:'S2', alcance:16500, impresiones:52000 },
+        { semana:'S3', alcance:18200, impresiones:61000 },{ semana:'S4', alcance:22100, impresiones:71800 }
       ];
-
+      const formatData = [
+        { tipo:'Video/Reel', promedio:295 },{ tipo:'Imagen', promedio:201 },{ tipo:'Carrusel', promedio:177 }
+      ];
       const competitorData = [
-        { name: 'Oh Mexico', followers: 20.1 },
-        { name: 'Coyo Taco', followers: 61.5 },
-        { name: 'Taquiza', followers: 17.7 },
-        { name: 'Bodega', followers: 96.2 }
+        { name:'Oh Mexico', followers:20.1 },{ name:'Coyo Taco', followers:61.5 },
+        { name:'Taquiza', followers:17.7 },{ name:'Bodega', followers:96.2 }
       ];
 
-      const feedPosts = [
-        'DPZD45KjcGD',
-        'DOghRNNinBo',
-        'DWRKQqEkejB',
-        'DWMVO0yivE1',
-        'DV_IenBkag1',
-        'DVylJVWFn87'
-      ];
-
-      const reelPosts = [
-        'DWEmyEpDwiO',
-        'DV6TmJdj2nF',
-        'DVbg6zUAT5D',
-        'DVJg0wbD2oN',
-        'DUqly5hkpSQ',
-        'DUgSos1iA7R',
-        'DT8Q3ZUCoug',
-        'DTifkqpjjY5'
-      ];
-
+      const feedPosts = ['DPZD45KjcGD','DOghRNNinBo','DWRKQqEkejB','DWMVO0yivE1','DV_IenBkag1','DVylJVWFn87'];
+      const reelPosts = ['DWEmyEpDwiO','DV6TmJdj2nF','DVbg6zUAT5D','DVJg0wbD2oN','DUqly5hkpSQ','DUgSos1iA7R','DT8Q3ZUCoug','DTifkqpjjY5'];
       const highlights = [
-        { name: 'Big Race', emoji: '🏎️' },
-        { name: 'Our Restaurants', emoji: '📍' },
-        { name: 'Mariachis', emoji: '🎵' },
-        { name: 'Order Online', emoji: '📱' },
-        { name: 'Our Menu', emoji: '🍽️' },
-        { name: 'Happy Hour', emoji: '🍸' },
-        { name: 'Taco Tuesday', emoji: '🌮' }
+        { name:'Big Race', emoji:'🏎️' },{ name:'Our Restaurants', emoji:'📍' },
+        { name:'Mariachis', emoji:'🎵' },{ name:'Order Online', emoji:'📱' },
+        { name:'Our Menu', emoji:'🍽️' },{ name:'Happy Hour', emoji:'🍸' },{ name:'Taco Tuesday', emoji:'🌮' }
       ];
 
       const competitors = [
-        {
-          handle: '@coyotaco',
-          followers: '61.5K',
-          posts: '2595',
-          verified: true,
-          location: 'Wynwood, Brickell, Coral Gables, Las Olas, South Miami',
-          bio: "Miami's freshest Mexican street food experience!",
-          posts_shortcodes: ['DWHcgKwgryP', 'DWR-J9ZGTPs']
-        },
-        {
-          handle: '@taquizatacos',
-          followers: '17.7K',
-          posts: '1836',
-          verified: false,
-          michelin: true,
-          location: '7450 Ocean Terrace, Miami Beach',
-          bio: 'A Beachside Taqueria • Michelin Recommended',
-          posts_shortcodes: ['DWU3Ns7jjEE', 'DVXZT_aDpS5']
-        },
-        {
-          handle: '@bodegataqueria',
-          followers: '96.2K',
-          posts: '3419',
-          verified: true,
-          location: 'South Florida, Chicago & DC',
-          bio: 'Taqueria & Speakeasy Lounge',
-          posts_shortcodes: ['DWCHvM7lPly', 'DV16vYWDxxJ']
-        }
+        { handle:'@coyotaco', followers:'61.5K', posts:'2595', verified:true, location:'Wynwood, Brickell, Coral Gables, Las Olas, South Miami', bio:"Miami's freshest Mexican street food experience!", posts_shortcodes:['DWHcgKwgryP','DWR-J9ZGTPs'] },
+        { handle:'@taquizatacos', followers:'17.7K', posts:'1836', verified:false, michelin:true, location:'7450 Ocean Terrace, Miami Beach', bio:'A Beachside Taqueria • Michelin Recommended', posts_shortcodes:['DWU3Ns7jjEE','DVXZT_aDpS5'] },
+        { handle:'@bodegataqueria', followers:'96.2K', posts:'3419', verified:true, location:'South Florida, Chicago & DC', bio:'Taqueria & Speakeasy Lounge', posts_shortcodes:['DWCHvM7lPly','DV16vYWDxxJ'] }
       ];
 
       const calendarDays = [
-        { date: 1, content: 'Post: Tacos al Pastor' },
-        { date: 2, content: 'Reel: Behind the Scenes' },
-        { date: 3, content: 'Story: Daily Special' },
-        { date: 4, content: 'Post: Ceviche' },
-        { date: 5, content: 'Reel: Team Highlight' },
-        { date: 6, content: 'Post: Happy Hour' },
-        { date: 7, content: 'Post: Customer Feature' },
-        { date: 8, content: 'Story: Live Cook' },
-        { date: 9, content: 'Post: New Menu Item' },
-        { date: 10, content: 'Reel: Food Prep' },
-        { date: 11, content: 'Post: Mariachis Night' },
-        { date: 12, content: 'Post: Location Spotlight' },
-        { date: 13, content: 'Story: Promotion' },
-        { date: 14, content: 'Reel: Customer Love' },
-        { date: 15, content: 'Post: Taco Tuesday' },
-        { date: 16, content: 'Post: Margarita Hour' },
-        { date: 17, content: 'Story: Event Alert' },
-        { date: 18, content: 'Post: New Recipe' },
-        { date: 19, content: 'Reel: Quick Tips' },
-        { date: 20, content: 'Post: Chef Interview' },
-        { date: 21, content: 'Post: Family Recipes' },
-        { date: 22, content: 'Story: Behind Scenes' },
-        { date: 23, content: 'Reel: Entertainment' },
-        { date: 24, content: 'Post: Weekend Special' },
-        { date: 25, content: 'Post: Music Night' },
-        { date: 26, content: 'Story: Live Music' },
-        { date: 27, content: 'Post: Menu Highlight' },
-        { date: 28, content: 'Reel: Highlights' },
-        { date: 29, content: 'Post: Thank You' },
-        { date: 30, content: 'Post: Month Recap' }
+        { date:1, content:'Reel: Molcajete close-up', type:'reel', pillar:'platos' },
+        { date:2, content:'Post: Taco Tuesday promo', type:'post', pillar:'promos' },
+        { date:3, content:'Story: Daily Special', type:'story', pillar:'promos' },
+        { date:4, content:'Reel: Guac prep BTS', type:'reel', pillar:'bts' },
+        { date:5, content:'Post: Team highlight', type:'post', pillar:'bts' },
+        { date:6, content:'Reel: Happy Hour vibe', type:'reel', pillar:'bebidas' },
+        { date:7, content:'Post: UGC repost', type:'post', pillar:'ugc' },
+        { date:8, content:'Story: Live cooking', type:'story', pillar:'bts' },
+        { date:9, content:'Post: New ceviche dish', type:'post', pillar:'platos' },
+        { date:10, content:'Reel: Margarita making', type:'reel', pillar:'bebidas' },
+        { date:11, content:'Post: Mariachi Friday', type:'post', pillar:'cultura' },
+        { date:12, content:'Reel: Lincoln Road vibe', type:'reel', pillar:'locaciones' },
+        { date:13, content:'Story: Weekend promo', type:'story', pillar:'promos' },
+        { date:14, content:'Post: Customer review', type:'post', pillar:'ugc' },
+        { date:15, content:'Reel: Taco Tuesday BTS', type:'reel', pillar:'platos' },
+        { date:16, content:'Post: Cocktail of week', type:'post', pillar:'bebidas' },
+        { date:17, content:'Story: Event teaser', type:'story', pillar:'cultura' },
+        { date:18, content:'Post: Chef special', type:'post', pillar:'platos' },
+        { date:19, content:'Reel: Kitchen chaos', type:'reel', pillar:'bts' },
+        { date:20, content:'Post: Food blogger repost', type:'post', pillar:'ugc' },
+        { date:21, content:'Reel: Family recipe', type:'reel', pillar:'platos' },
+        { date:22, content:'Story: Behind scenes', type:'story', pillar:'bts' },
+        { date:23, content:'Post: Weekend brunch', type:'post', pillar:'promos' },
+        { date:24, content:'Reel: Ocean Drive sunset', type:'reel', pillar:'locaciones' },
+        { date:25, content:'Post: Live music night', type:'post', pillar:'cultura' },
+        { date:26, content:'Story: Espanola Way', type:'story', pillar:'locaciones' },
+        { date:27, content:'Reel: Menu highlight', type:'reel', pillar:'platos' },
+        { date:28, content:'Post: Tag a friend', type:'post', pillar:'ugc' },
+        { date:29, content:'Post: Thank you post', type:'post', pillar:'ugc' },
+        { date:30, content:'Reel: Month recap', type:'reel', pillar:'bts' }
       ];
 
       const locations = [
-        {
-          name: 'Oh Mexico - Espanola Way',
-          address: '1445 Espanola Way, Miami Beach, FL 33139',
-          phone: '(305) 555-0101',
-          hours: 'Daily 11:00 AM - 11:00 PM'
-        },
-        {
-          name: 'Oh Mexico - Ocean Drive',
-          address: '804 Ocean Drive, Miami Beach, FL 33139',
-          phone: '(305) 555-0102',
-          hours: 'Daily 11:00 AM - 12:00 AM'
-        },
-        {
-          name: 'Oh Mexico - Lincoln Road',
-          address: '1111 Lincoln Road, Miami Beach, FL 33139',
-          phone: '(305) 555-0103',
-          hours: 'Daily 11:00 AM - 11:00 PM'
-        }
+        { name:'Oh Mexico - Espanola Way', address:'1445 Espanola Way, Miami Beach, FL 33139', phone:'(305) 555-0101', hours:'Daily 11:00 AM - 11:00 PM' },
+        { name:'Oh Mexico - Ocean Drive', address:'804 Ocean Drive, Miami Beach, FL 33139', phone:'(305) 555-0102', hours:'Daily 11:00 AM - 12:00 AM' },
+        { name:'Oh Mexico - Lincoln Road', address:'1111 Lincoln Road, Miami Beach, FL 33139', phone:'(305) 555-0103', hours:'Daily 11:00 AM - 11:00 PM' }
       ];
+
+      /* ===== CONTENT PILLARS ===== */
+      const pillars = {
+        platos: {
+          name: 'Platos & Sabor', emoji: '🌮',
+          posts: [
+            { title: 'Close-up de plato estrella', format: 'Video o Imagen',
+              caption: "The molcajete doesn't wait. Neither should you. 🔥🌮 Bold flavors, fire presentation and a little picante — just how we like it. 👉 Reserve your table tonight.",
+              hashtags: '#MolcajeteTime #MiamiMexicanFood #MiamiFoodie #LincolnRoad #MiamiBeachEats #AuthenticMexicanFood #MexicanCuisineMiami #MiamiDining #MiamiEats #FoodMiami',
+              direction: 'Primer plano con luz cálida (natural o difusa), fondo neutro de madera o piedra volcánica, vapor o movimiento si es video.',
+              location: '836 Lincoln Rd, Miami Beach' },
+            { title: 'Plato siendo servido en mesa', format: 'Reel',
+              caption: "When the plate hits the table and the whole restaurant turns around 👀🌮 That's the Oh Mexico effect.\n\nCome see (and taste) what everyone's talking about.",
+              hashtags: '#MiamiFoodScene #MexicanFood #OhMexico #MiamiBeach #FoodPorn #MiamiRestaurants #TableSide #MiamiDining #AuthenticMexican #LincolnRoadMall',
+              direction: 'Toma desde arriba o ángulo bajo. El mesero coloca el plato, humo o vapor visible. Sonido ambiente del restaurante.',
+              location: '836 Lincoln Rd, Miami Beach' }
+          ]
+        },
+        bebidas: {
+          name: 'Bebidas & Vibe', emoji: '🍹',
+          posts: [
+            { title: 'Golden hour drink', format: 'Reel',
+              caption: "Some nights start with a margarita. The best ones never stop there. 🍹✨\n\nCome find your vibe at Oh! Mexico.",
+              hashtags: '#MargaritaNight #MiamiNightlife #MiamiBeachBar #MargaritaLovers #MexicanDrinks #MiamiFoodScene #LincolnRoadMiami #MiamiCocktails #SummerInMiami #MiamiEats',
+              direction: 'Plano cercano a la copa, bokeh del fondo con luces cálidas, colores naranja/dorado. Si es en terraza, perfecta la luz de atardecer.',
+              location: '836 Lincoln Rd, Miami Beach' },
+            { title: 'Cocktail lineup', format: 'Imagen',
+              caption: "Pick your fighter 🍹🥊 From smoky mezcal to classic margs — the only wrong choice is not ordering one.\n\n📍 Oh Mexico, Lincoln Road",
+              hashtags: '#MiamiCocktails #MezcalLovers #MargaritaTime #DrinkMiami #MiamiNightOut #CocktailBar #MexicanDrinks #HappyHourMiami #MiamiBeachNightlife',
+              direction: 'Overhead shot o línea de cócteles en barra con iluminación de neón. Colores vibrantes, frutas como garnish visibles.',
+              location: '836 Lincoln Rd, Miami Beach' }
+          ]
+        },
+        bts: {
+          name: 'Behind the Scenes', emoji: '👀',
+          posts: [
+            { title: 'Apertura de cocina', format: 'Reel',
+              caption: "Before the doors open, the magic starts 🔪🔥 Mise en place, tortillas from scratch, salsas grinding — this is how Oh Mexico wakes up.\n\n6 AM. No shortcuts.",
+              hashtags: '#BehindTheScenes #MiamiChef #KitchenLife #RestaurantBTS #MexicanKitchen #MiamiFoodScene #FromScratch #ChefLife #MiamiBeachEats #OhMexico',
+              direction: 'Time-lapse o cortes rápidos: manos cortando, llama del fogón, tortillas en comal. Luz natural de mañana.',
+              location: '836 Lincoln Rd, Miami Beach' },
+            { title: 'El equipo', format: 'Post',
+              caption: "Behind every perfect molcajete, there's a team that shows up before sunrise ☀️👨‍🍳\n\nMeet the crew that makes Oh Mexico happen, every single day.",
+              hashtags: '#TeamOhMexico #RestaurantFamily #MiamiHospitality #KitchenCrew #MiamiFoodie #WeAreOhMexico #ChefTeam #MiamiBeach #RestaurantLife',
+              direction: 'Foto grupal casual en la cocina o frente al restaurante. Todos sonriendo, delantales puestos. Ambiente auténtico, no posado.',
+              location: '836 Lincoln Rd, Miami Beach' }
+          ]
+        },
+        ugc: {
+          name: 'UGC & Comunidad', emoji: '📸',
+          posts: [
+            { title: 'Repost de food blogger', format: 'Reel o Carrusel',
+              caption: "When the food speaks for itself 🌮🌶️\n\nThanks @[creator] for stopping by Lincoln Road and giving Oh! Mexico a real try. The queso fundido and molcajete don't disappoint — ever.",
+              hashtags: '#MiamiFood #MiamiFoodie #LincolnRoad #MexicanRestaurantMiami #MiamiBeachEats #FoodReview #MiamiEats #AuthenticMexicanFood #MexicanFoodMiami #OhMexico',
+              direction: 'El video/foto original del creador. Agregar solo un texto de pantalla discreto con el nombre del plato y ubicación.',
+              location: '836 Lincoln Rd, Miami Beach' },
+            { title: 'Tag a friend challenge', format: 'Imagen o Reel',
+              caption: "Tag someone who needs this in their life 👇🌮🔥\n\nNo caption needed. Just vibes and the best tacos on Lincoln Road.",
+              hashtags: '#TagAFriend #MiamiFoodies #TacoLovers #MiamiBeach #FoodieLife #MexicanFoodMiami #LincolnRoad #BestTacosMiami #FoodChallenge #OhMexico',
+              direction: 'Close-up provocativo del plato más fotogénico. Colores saturados, ángulo ligeramente picado.',
+              location: '836 Lincoln Rd, Miami Beach' }
+          ]
+        },
+        cultura: {
+          name: 'Cultura & Eventos', emoji: '🎶',
+          posts: [
+            { title: 'Noche de Mariachis', format: 'Reel',
+              caption: "Friday nights hit different with live mariachis 🎶🇲🇽\n\nThe music, the mezcal, the molcajete — it's not just dinner, it's a whole experience.\n\n📍 Every Friday at Oh Mexico",
+              hashtags: '#MariachiNight #MiamiLiveMusic #MexicanCulture #FridayNightMiami #MiamiBeachNightlife #LiveMusicMiami #MexicanTradition #OhMexico #MiamiWeekend #LincolnRoad',
+              direction: 'Los mariachis tocando entre las mesas. Clientes disfrutando. Tomas cortas intercaladas con platos y bebidas.',
+              location: '836 Lincoln Rd, Miami Beach' },
+            { title: 'Weekly special series', format: 'Imagen o Reel',
+              caption: "This week's special has entered the chat. 🌮👀\n\n[NOMBRE DEL PLATO] — available this week only. Bold, fresh and made the way it should be: con mucho sabor mexicano.",
+              hashtags: '#WeeklySpecial #MiamiEats #MexicanFoodMiami #MiamiFoodie #LincolnRoadMiami #MexicanCuisine #MiamiRestaurants #AuthenticMexicanFood #MiamiBeachEats #OhMexico',
+              direction: 'Primer plano del plato especial con etiqueta de texto. Fondo limpio. Puede incluir al chef preparándolo.',
+              location: '836 Lincoln Rd, Miami Beach' }
+          ]
+        }
+      };
+
+      /* ===== HASHTAG DATA ===== */
+      const hashtagSets = {
+        high: ['#MiamiFoodie','#MiamiEats','#MiamiBeach','#MiamiFoodScene','#MexicanFood','#FoodPorn','#TacoTuesday','#MiamiRestaurants'],
+        mid: ['#MiamiBeachEats','#LincolnRoad','#MexicanCuisine','#AuthenticMexican','#MiamiDining','#MargaritaLovers','#MexicanFoodMiami','#OhMexico'],
+        niche: ['#MolcajeteTime','#MiamiChef','#MiamiNightlife','#MexicanRestaurantMiami','#MiamiCocktails','#FoodReview','#KitchenLife','#305Eats']
+      };
+
+      /* ===== POST ANALYSIS DATA ===== */
+      const postAnalysis = [
+        { shortcode:'DPZD45KjcGD', score:92, type:'Post', caption:'Taco Day celebration', likes:847, comments:62, reach:'18.6K',
+          strengths:'Strong CTA, vibrant food photography, timely theme (Taco Day)', weaknesses:'Could add location tag for local reach', improvement:'Add carousel with behind-scenes of taco prep' },
+        { shortcode:'DWRKQqEkejB', score:78, type:'Post', caption:'Mexican Fiesta promo', likes:523, comments:34, reach:'12.1K',
+          strengths:'Good branding, clear event promotion', weaknesses:'Generic caption, few hashtags', improvement:'Use 10-15 targeted hashtags, add urgency in caption' },
+        { shortcode:'DWEmyEpDwiO', score:88, type:'Reel', caption:'Kitchen prep reel', likes:712, comments:51, reach:'15.9K',
+          strengths:'Authentic BTS content, trending audio, good pacing', weaknesses:'No text overlay for silent viewers', improvement:'Add captions/text overlay for accessibility' },
+        { shortcode:'DWMVO0yivE1', score:65, type:'Post', caption:'Cocktail Day post', likes:289, comments:18, reach:'7.2K',
+          strengths:'Beautiful product shot', weaknesses:'Low engagement, no question/CTA in caption, posted at off-peak hour', improvement:'Post between 6-8PM, add engaging question in caption' }
+      ];
+
+      /* ===== WEEKLY REPORT DATA ===== */
+      const weeklyReport = {
+        period: 'Mar 20 - Mar 27, 2026',
+        metrics: [
+          { name:'Nuevos seguidores', value:'+87', change:'+12%', up:true },
+          { name:'Engagement rate', value:'8.2%', change:'+0.3%', up:true },
+          { name:'Alcance total', value:'22.1K', change:'+15%', up:true },
+          { name:'Impresiones', value:'71.8K', change:'+8%', up:true },
+          { name:'Guardados', value:'342', change:'+22%', up:true },
+          { name:'Compartidos', value:'156', change:'-5%', up:false },
+          { name:'Visitas al perfil', value:'1,204', change:'+18%', up:true },
+          { name:'Clicks en link', value:'89', change:'+31%', up:true }
+        ],
+        topPost: 'DPZD45KjcGD',
+        insight: 'Los Reels siguen siendo el formato estrella con 295 interacciones promedio vs 201 de imágenes. El contenido de Behind the Scenes generó 3x más guardados que las promociones directas. Recomendación: aumentar BTS de 2 a 4 posts semanales y reducir promos directas.',
+        actions: [
+          'Publicar más Reels de cocina/prep (mejor formato por engagement)',
+          'Repostear 1-2 food bloggers por semana (el UGC triplicó el engagement)',
+          'Mover posts principales a martes/jueves 6-8PM (peak engagement)',
+          'Agregar series semanales fijas ("El plato de la semana", "Cocktail Friday")',
+          'Usar 10-15 hashtags por post (actualmente solo usan 3)'
+        ]
+      };
+
+      /* ===== STRATEGY RECOMMENDATIONS ===== */
+      const strategies = [
+        { icon:'📈', title:'Más Reels, menos estáticos', desc:'Los videos generan 47% más interacciones que las imágenes estáticas.', actions:['Apuntar a 4-5 Reels por semana','Usar trending audios de la semana','Duración ideal: 15-30 segundos'] },
+        { icon:'#️⃣', title:'Optimizar hashtags', desc:'Oh Mexico usa solo 3 hashtags por post. Instagram permite hasta 30, y 10-15 relevantes amplían alcance considerablemente.', actions:['Mezclar alta competencia + nicho local','Rotar sets de hashtags para evitar shadowban','Incluir hashtags de ubicación (#LincolnRoad, #MiamiBeach)'] },
+        { icon:'📸', title:'Sistematizar UGC', desc:'El mejor post del mes fue exactamente un repost de food blogger. Esto hay que sistematizarlo.', actions:['Invitar 1-2 creadores por mes','Repostear con crédito + contexto propio','Crear highlight de "Reviews" en el perfil'] },
+        { icon:'📅', title:'Series de contenido fijas', desc:'Crear recurrencia genera hábito en la audiencia y facilita la planificación.', actions:['"Taco Tuesday" — semanal, mismo formato','"El plato de la semana" — expectativa y fidelidad','"Cocktail Friday" — asociar bebidas con fin de semana'] },
+        { icon:'📍', title:'Enfoque local en Reels', desc:'Mencionar Lincoln Road, Ocean Drive, Espanola Way en el contenido. El post del food blogger con location tag triplicó el engagement.', actions:['Geotag en cada post sin excepción','Mencionar calles/barrios en captions','Colaborar con cuentas de "Best of Miami"'] },
+        { icon:'👀', title:'Behind the Scenes x3', desc:'El contenido de cocina en proceso y del equipo genera más guardados y compartidos que cualquier otro tipo.', actions:['Apertura de cocina (Reel de time-lapse)','Preparación de plato estrella (Reel paso a paso)','Historias del equipo (humanizar la marca)'] }
+      ];
+
+      /* ===== HANDLERS ===== */
+      const handleGenerate = () => {
+        const pillar = pillars[activePillar];
+        const post = pillar.posts[Math.floor(Math.random() * pillar.posts.length)];
+        setGeneratedPost(post);
+      };
+
+      const handleCaptionGenerate = () => {
+        const tones = {
+          casual: { prefix:"", style:"Casual, friendly, with emojis" },
+          bold: { prefix:"", style:"Bold, punchy, confident" },
+          storytelling: { prefix:"", style:"Narrative, emotional" },
+          promo: { prefix:"", style:"Promotional with clear CTA" }
+        };
+        const topic = captionInput || 'nuestro molcajete especial de hoy';
+        const captions = {
+          casual: `Good food, good vibes, good company 🌮✨\n\n${topic} — come taste what makes Oh Mexico the spot on Lincoln Road.\n\nTag someone who needs this 👇`,
+          bold: `This isn't just food. This is a statement. 🔥\n\n${topic} — bold, authentic, unapologetic Mexican flavor. The kind that makes you rethink everything you thought you knew.\n\n📍 Oh Mexico, Lincoln Road`,
+          storytelling: `There's a moment when the molcajete arrives at the table. The whole restaurant pauses. The steam rises. And you know — this is going to be good.\n\n${topic} at Oh Mexico. Some things are worth the trip to Lincoln Road.`,
+          promo: `🚨 THIS WEEK ONLY 🚨\n\n${topic} — available now at all Oh Mexico locations.\n\n📍 Lincoln Road | Ocean Drive | Espanola Way\n🕐 Mon-Sun 11AM-11PM\n\n👉 Reserve your table: link in bio`
+        };
+        setGeneratedCaption({
+          text: captions[captionTone],
+          hashtags: hashtagSets.high.slice(0,5).concat(hashtagSets.mid.slice(0,5)).join(' '),
+          tone: tones[captionTone].style
+        });
+      };
+
+      /* ===== RENDER ===== */
+      const calTypeColors = { reel:'#C4622D', post:'#6B7D3A', story:'#D4A030' };
 
       return (
         <div className="dashboard-container">
           <div className="header">
-            <h1>🌮 Oh Mexico</h1>
-            <p>Instagram Analytics & Content Dashboard | Miami Beach</p>
+            <div>
+              <h1>🌮 Oh Mexico</h1>
+              <p>Instagram Analytics & Content Dashboard | Miami Beach</p>
+            </div>
           </div>
 
           <div className="content">
             <div className="tabs">
-              {['overview', 'contenido', 'calendario', 'competencia', 'locaciones'].map(tab => (
-                <button
-                  key={tab}
-                  className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-                  onClick={() => {
-                    setActiveTab(tab);
-                    setActiveSubTab('feed');
-                  }}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {[
+                {id:'overview',label:'Overview'},
+                {id:'contenido',label:'Contenido'},
+                {id:'creador',label:'✨ AI Creador'},
+                {id:'analisis',label:'📊 Análisis'},
+                {id:'estrategia',label:'🎯 Estrategia'},
+                {id:'calendario',label:'Calendario'},
+                {id:'competencia',label:'Competencia'},
+                {id:'locaciones',label:'Locaciones'}
+              ].map(tab => (
+                <button key={tab.id} className={`tab-button ${activeTab===tab.id?'active':''}`}
+                  onClick={() => { setActiveTab(tab.id); setActiveSubTab('feed'); }}>
+                  {tab.label}
                 </button>
               ))}
             </div>
 
+            {/* ===== OVERVIEW TAB ===== */}
             {activeTab === 'overview' && (
               <div className="tab-content">
                 <div className="kpi-grid">
-                  <div className="kpi-card">
-                    <div className="kpi-label">Seguidores</div>
-                    <div className="kpi-value">20,100</div>
-                    <div className="kpi-subtext">+300 this month</div>
-                  </div>
-                  <div className="kpi-card">
-                    <div className="kpi-label">Engagement Rate</div>
-                    <div className="kpi-value">8.0%</div>
-                    <div className="kpi-subtext">Above average</div>
-                  </div>
-                  <div className="kpi-card">
-                    <div className="kpi-label">Alcance Mensual</div>
-                    <div className="kpi-value">71.8K</div>
-                    <div className="kpi-subtext">+12.5% growth</div>
-                  </div>
-                  <div className="kpi-card">
-                    <div className="kpi-label">Best Performer</div>
-                    <div className="kpi-value">18.6K</div>
-                    <div className="kpi-subtext">Top post reach</div>
-                  </div>
+                  <div className="kpi-card"><div className="kpi-label">Seguidores</div><div className="kpi-value">20,100</div><div className="kpi-subtext">+300 this month</div></div>
+                  <div className="kpi-card"><div className="kpi-label">Engagement Rate</div><div className="kpi-value">8.0%</div><div className="kpi-subtext">Above average</div></div>
+                  <div className="kpi-card"><div className="kpi-label">Alcance Mensual</div><div className="kpi-value">71.8K</div><div className="kpi-subtext">+12.5% growth</div></div>
+                  <div className="kpi-card"><div className="kpi-label">Best Performer</div><div className="kpi-value">18.6K</div><div className="kpi-subtext">Top post reach</div></div>
+                  <div className="kpi-card"><div className="kpi-label">Formato Top</div><div className="kpi-value">Reels</div><div className="kpi-subtext">295 avg interactions</div></div>
                 </div>
-
                 <div className="chart-grid">
                   <div className="chart-container">
                     <div className="chart-title">Crecimiento de Seguidores</div>
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={280}>
                       <AreaChart data={seguidoresData}>
-                        <defs>
-                          <linearGradient id="colorFollowers" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#C4622D" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#C4622D" stopOpacity={0.1}/>
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="mes" stroke="#666" />
-                        <YAxis stroke="#666" />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #C4622D',
-                            borderRadius: '8px'
-                          }}
-                        />
-                        <Area type="monotone" dataKey="followers" stroke="#C4622D" fillOpacity={1} fill="url(#colorFollowers)" />
+                        <defs><linearGradient id="colorFollowers" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#C4622D" stopOpacity={0.8}/><stop offset="95%" stopColor="#C4622D" stopOpacity={0.1}/></linearGradient></defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                        <XAxis dataKey="mes" stroke="#666"/><YAxis stroke="#666"/>
+                        <Tooltip contentStyle={{backgroundColor:'#FFF',border:'1px solid #C4622D',borderRadius:'8px'}}/>
+                        <Area type="monotone" dataKey="followers" stroke="#C4622D" fillOpacity={1} fill="url(#colorFollowers)"/>
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-
                   <div className="chart-container">
                     <div className="chart-title">Engagement por Día</div>
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={280}>
                       <BarChart data={engagementData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="dia" stroke="#666" />
-                        <YAxis stroke="#666" />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #6B7D3A',
-                            borderRadius: '8px'
-                          }}
-                        />
-                        <Legend />
-                        <Bar dataKey="engagement" stackId="a" fill="#C4622D" radius={[8, 8, 0, 0]} />
-                        <Bar dataKey="interaccion" stackId="a" fill="#D4A030" radius={[8, 8, 0, 0]} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                        <XAxis dataKey="dia" stroke="#666"/><YAxis stroke="#666"/>
+                        <Tooltip contentStyle={{backgroundColor:'#FFF',border:'1px solid #6B7D3A',borderRadius:'8px'}}/>
+                        <Legend/><Bar dataKey="engagement" stackId="a" fill="#C4622D" radius={[6,6,0,0]}/><Bar dataKey="interaccion" stackId="a" fill="#D4A030" radius={[6,6,0,0]}/>
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-
+                  <div className="chart-container">
+                    <div className="chart-title">Interacciones Promedio por Formato</div>
+                    <ResponsiveContainer width="100%" height={280}>
+                      <BarChart data={formatData} layout="vertical">
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                        <XAxis type="number" stroke="#666"/><YAxis type="category" dataKey="tipo" stroke="#666" width={80}/>
+                        <Tooltip contentStyle={{backgroundColor:'#FFF',border:'1px solid #C4622D',borderRadius:'8px'}}/>
+                        <Bar dataKey="promedio" fill="#C4622D" radius={[0,6,6,0]} barSize={30}/>
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <p style={{fontSize:'12px',color:'#C4622D',fontWeight:600,marginTop:8}}>📌 Los videos son claramente el formato más efectivo</p>
+                  </div>
                   <div className="chart-container">
                     <div className="chart-title">Alcance e Impresiones (Semanal)</div>
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={280}>
                       <LineChart data={alcanceData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="semana" stroke="#666" />
-                        <YAxis stroke="#666" />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #1B2A4A',
-                            borderRadius: '8px'
-                          }}
-                        />
-                        <Legend />
-                        <Line type="monotone" dataKey="alcance" stroke="#6B7D3A" strokeWidth={2} />
-                        <Line type="monotone" dataKey="impresiones" stroke="#D4A030" strokeWidth={2} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                        <XAxis dataKey="semana" stroke="#666"/><YAxis stroke="#666"/>
+                        <Tooltip contentStyle={{backgroundColor:'#FFF',border:'1px solid #1B2A4A',borderRadius:'8px'}}/>
+                        <Legend/><Line type="monotone" dataKey="alcance" stroke="#6B7D3A" strokeWidth={2}/><Line type="monotone" dataKey="impresiones" stroke="#D4A030" strokeWidth={2}/>
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-
-                  <div className="chart-container">
-                    <div className="chart-title">Pilares de Contenido</div>
-                    <div style={{ padding: '20px 0' }}>
-                      <div className="legend-container">
-                        <div className="legend-item">
-                          <div className="legend-color" style={{ backgroundColor: '#C4622D' }}></div>
-                          <span>Recetas & Gastronomía (35%)</span>
-                        </div>
-                        <div className="legend-item">
-                          <div className="legend-color" style={{ backgroundColor: '#D4A030' }}></div>
-                          <span>Eventos & Promociones (25%)</span>
-                        </div>
-                        <div className="legend-item">
-                          <div className="legend-color" style={{ backgroundColor: '#6B7D3A' }}></div>
-                          <span>Cultura & Entretenimiento (20%)</span>
-                        </div>
-                        <div className="legend-item">
-                          <div className="legend-color" style={{ backgroundColor: '#1B2A4A' }}></div>
-                          <span>Customer Engagement (20%)</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-
                 <div className="recognition-banner">
                   <h3>🏆 Reconocimientos</h3>
-                  <p>Consistentemente entre los restaurantes mexicanos más seguidos de Miami Beach • Tasa de engagement 5% por encima del promedio de la industria</p>
+                  <p>Engagement 5% por encima del promedio de la industria • Reels con 47% más interacciones que imágenes</p>
                 </div>
               </div>
             )}
 
+            {/* ===== CONTENIDO TAB ===== */}
             {activeTab === 'contenido' && (
               <div className="tab-content">
                 <div className="sub-tabs">
-                  {['feed', 'reels', 'highlights'].map(tab => (
-                    <button
-                      key={tab}
-                      className={`sub-tab-button ${activeSubTab === tab ? 'active' : ''}`}
-                      onClick={() => setActiveSubTab(tab)}
-                    >
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {['feed','reels','highlights'].map(tab => (
+                    <button key={tab} className={`sub-tab-button ${activeSubTab===tab?'active':''}`} onClick={() => setActiveSubTab(tab)}>
+                      {tab.charAt(0).toUpperCase()+tab.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                {activeSubTab === 'feed' && (
+                  <div className="feed-grid">
+                    {feedPosts.map((code,i) => (
+                      <div key={i} className="feed-item">
+                        <iframe src={`https://www.instagram.com/p/${code}/embed`} loading="lazy" title={`Post ${i+1}`}/>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {activeSubTab === 'reels' && (
+                  <div className="reels-grid">
+                    {reelPosts.map((code,i) => (
+                      <div key={i} className="reel-item">
+                        <iframe src={`https://www.instagram.com/reel/${code}/embed`} loading="lazy" title={`Reel ${i+1}`}/>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {activeSubTab === 'highlights' && (
+                  <div className="highlights-grid">
+                    {highlights.map((h,i) => (
+                      <div key={i} className="highlight-card">
+                        <div className="highlight-circle">{h.emoji}</div>
+                        <div className="highlight-label">{h.name}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ===== AI CREADOR TAB ===== */}
+            {activeTab === 'creador' && (
+              <div className="tab-content">
+                <div className="sub-tabs">
+                  {[{id:'generator',label:'📝 Generador de Posts'},{id:'caption',label:'✍️ Caption Writer'},{id:'hashtags',label:'#️⃣ Hashtag Optimizer'}].map(tab => (
+                    <button key={tab.id} className={`sub-tab-button ${creadorSubTab===tab.id?'active':''}`} onClick={() => setCreadorSubTab(tab.id)}>
+                      {tab.label}
                     </button>
                   ))}
                 </div>
 
-                {activeSubTab === 'feed' && (
-                  <div className="feed-grid">
-                    {feedPosts.map(shortcode => (
-                      <div key={shortcode} className="feed-item">
-                        <iframe
-                          src={`https://www.instagram.com/p/${shortcode}/embed`}
-                          frameBorder="0"
-                          scrolling="no"
-                          allowTransparency="true"
-                          loading="lazy"
-                        ></iframe>
+                {creadorSubTab === 'generator' && (
+                  <div className="ai-section">
+                    <div className="ai-card">
+                      <h3>🎨 Generador de Posts por Pilar</h3>
+                      <p style={{fontSize:'13px',color:'#666',marginBottom:16}}>Seleccioná un pilar de contenido y generá un post completo con caption, hashtags y dirección de imagen — todo en la voz de Oh Mexico.</p>
+                      <div className="pillar-selector">
+                        {Object.entries(pillars).map(([key,p]) => (
+                          <button key={key} className={`pillar-chip ${activePillar===key?'active':''}`} onClick={() => { setActivePillar(key); setGeneratedPost(null); }}>
+                            {p.emoji} {p.name}
+                          </button>
+                        ))}
                       </div>
-                    ))}
+                      <button className="generate-btn" onClick={handleGenerate}>
+                        ✨ Generar Post
+                      </button>
+
+                      {generatedPost && (
+                        <div className="generated-post">
+                          <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
+                            <div style={{flex:'1 1 380px'}}>
+                              <h4 style={{fontSize:'15px',fontWeight:600,color:'#1B2A4A',marginBottom:4}}>{generatedPost.title}</h4>
+                              <span style={{fontSize:'11px',background:'#F0F0F0',padding:'3px 10px',borderRadius:12,color:'#666'}}>{generatedPost.format}</span>
+                              <div className="post-preview" style={{marginTop:16}}>
+                                <div className="post-preview-header">
+                                  <div className="post-avatar">OH</div>
+                                  <div>
+                                    <div className="post-username">ohmexico</div>
+                                    <div style={{fontSize:'11px',color:'#999'}}>Oh Mexico Restaurant</div>
+                                  </div>
+                                </div>
+                                <div className="post-caption-area">
+                                  <div className="post-caption">{generatedPost.caption}</div>
+                                  <div className="post-hashtags">{generatedPost.hashtags}</div>
+                                  <div className="post-location-tag">📍 {generatedPost.location}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{flex:'1 1 300px'}}>
+                              <div className="post-direction">
+                                <h4>🎬 Dirección de imagen/video</h4>
+                                <p>{generatedPost.direction}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
-                {activeSubTab === 'reels' && (
-                  <div className="reels-grid">
-                    {reelPosts.map(shortcode => (
-                      <div key={shortcode} className="reel-item">
-                        <iframe
-                          src={`https://www.instagram.com/reel/${shortcode}/embed`}
-                          frameBorder="0"
-                          scrolling="no"
-                          allowTransparency="true"
-                          loading="lazy"
-                        ></iframe>
+                {creadorSubTab === 'caption' && (
+                  <div className="ai-section">
+                    <div className="caption-writer">
+                      <h3 style={{fontSize:'18px',fontWeight:600,color:'#1B2A4A',marginBottom:16,display:'flex',alignItems:'center',gap:8}}>✍️ Caption Writer</h3>
+                      <p style={{fontSize:'13px',color:'#666',marginBottom:12}}>Escribí el tema o producto y elegí el tono. Se genera un caption en la voz de Oh Mexico con hashtags optimizados.</p>
+                      <textarea className="caption-input" placeholder="Ej: nuestro molcajete especial, happy hour de margaritas, noche de mariachis..." value={captionInput} onChange={e => setCaptionInput(e.target.value)}/>
+                      <div style={{marginTop:12}}>
+                        <span style={{fontSize:'12px',fontWeight:600,color:'#1B2A4A'}}>Tono:</span>
+                        <div className="tone-selector">
+                          {[{id:'casual',label:'😎 Casual'},{id:'bold',label:'🔥 Bold'},{id:'storytelling',label:'📖 Storytelling'},{id:'promo',label:'📢 Promo'}].map(t => (
+                            <button key={t.id} className={`tone-chip ${captionTone===t.id?'active':''}`} onClick={() => setCaptionTone(t.id)}>{t.label}</button>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                      <button className="generate-btn" onClick={handleCaptionGenerate} style={{marginTop:8}}>✨ Generar Caption</button>
+                      {generatedCaption && (
+                        <div className="caption-output">
+                          <div style={{fontSize:'11px',color:'#999',marginBottom:8}}>Tono: {generatedCaption.tone}</div>
+                          <div className="caption-text">{generatedCaption.text}</div>
+                          <div style={{marginTop:12,padding:'12px',background:'#FFF',borderRadius:8,border:'1px solid #eee'}}>
+                            <div style={{fontSize:'11px',fontWeight:600,color:'#6B7D3A',marginBottom:6}}>HASHTAGS SUGERIDOS</div>
+                            <div style={{fontSize:'12px',color:'#C4622D',lineHeight:1.6}}>{generatedCaption.hashtags}</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
-                {activeSubTab === 'highlights' && (
-                  <div className="highlights-grid">
-                    {highlights.map(highlight => (
-                      <div key={highlight.name} className="highlight-card">
-                        <a href="https://www.instagram.com/oh.mexico.miami/" style={{ textDecoration: 'none' }} target="_blank" rel="noopener noreferrer">
-                          <div className="highlight-circle">{highlight.emoji}</div>
-                          <div className="highlight-label">{highlight.name}</div>
-                        </a>
+                {creadorSubTab === 'hashtags' && (
+                  <div className="ai-section">
+                    <div className="hashtag-section">
+                      <h3 style={{fontSize:'18px',fontWeight:600,color:'#1B2A4A',marginBottom:4}}>🏷️ Hashtag Optimizer</h3>
+                      <p style={{fontSize:'13px',color:'#666',marginBottom:20}}>Sets de hashtags organizados por alcance. Mezclá alta competencia con nicho local para maximizar el reach.</p>
+
+                      <div style={{marginBottom:20}}>
+                        <div style={{fontSize:'13px',fontWeight:600,color:'#2E7D32',marginBottom:8}}>🟢 Alto alcance (100K+ posts)</div>
+                        <div className="hashtag-grid">
+                          {hashtagSets.high.map((h,i) => <span key={i} className="hashtag-tag hashtag-high">{h}</span>)}
+                        </div>
                       </div>
-                    ))}
+                      <div style={{marginBottom:20}}>
+                        <div style={{fontSize:'13px',fontWeight:600,color:'#E65100',marginBottom:8}}>🟠 Alcance medio (10K-100K posts)</div>
+                        <div className="hashtag-grid">
+                          {hashtagSets.mid.map((h,i) => <span key={i} className="hashtag-tag hashtag-mid">{h}</span>)}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{fontSize:'13px',fontWeight:600,color:'#7B1FA2',marginBottom:8}}>🟣 Nicho local (menor competencia, mayor relevancia)</div>
+                        <div className="hashtag-grid">
+                          {hashtagSets.niche.map((h,i) => <span key={i} className="hashtag-tag hashtag-low">{h}</span>)}
+                        </div>
+                      </div>
+                      <div className="insight-box" style={{marginTop:20}}>
+                        <p><strong>💡 Tip:</strong> La mezcla ideal es 3-4 de alto alcance + 4-5 de alcance medio + 3-4 de nicho. Oh Mexico actualmente usa solo 3 hashtags por post — subir a 10-15 puede ampliar el alcance considerablemente.</p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
+            {/* ===== ANÁLISIS TAB ===== */}
+            {activeTab === 'analisis' && (
+              <div className="tab-content">
+                <div className="sub-tabs">
+                  {[{id:'posts',label:'🔍 Post Analyzer'},{id:'report',label:'📋 Informe Semanal'}].map(tab => (
+                    <button key={tab.id} className={`sub-tab-button ${activeSubTab===tab.id?'active':''}`} onClick={() => setActiveSubTab(tab.id)}>
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {activeSubTab === 'posts' && (
+                  <div>
+                    <div className="pillar-selector" style={{marginBottom:20}}>
+                      {postAnalysis.map((p,i) => (
+                        <button key={i} className={`pillar-chip ${analyzerPost===i?'active':''}`} onClick={() => setAnalyzerPost(i)}>
+                          {p.type}: {p.caption}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="analyzer-grid">
+                      <div className="analyzer-post">
+                        <iframe src={`https://www.instagram.com/p/${postAnalysis[analyzerPost].shortcode}/embed`} style={{width:'100%',height:'500px',borderRadius:'12px',border:'none'}} loading="lazy"/>
+                      </div>
+                      <div className="analyzer-results">
+                        <div className={`score-badge ${postAnalysis[analyzerPost].score>=80?'score-high':postAnalysis[analyzerPost].score>=60?'score-mid':'score-low'}`}>
+                          ⭐ Score: {postAnalysis[analyzerPost].score}/100
+                        </div>
+                        <div className="analysis-item">
+                          <div className="analysis-label">Métricas</div>
+                          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginTop:6}}>
+                            <div style={{textAlign:'center',padding:8,background:'#F9FAFB',borderRadius:8}}><div style={{fontSize:'18px',fontWeight:700,color:'#1B2A4A'}}>{postAnalysis[analyzerPost].likes}</div><div style={{fontSize:'10px',color:'#999'}}>Likes</div></div>
+                            <div style={{textAlign:'center',padding:8,background:'#F9FAFB',borderRadius:8}}><div style={{fontSize:'18px',fontWeight:700,color:'#1B2A4A'}}>{postAnalysis[analyzerPost].comments}</div><div style={{fontSize:'10px',color:'#999'}}>Comments</div></div>
+                            <div style={{textAlign:'center',padding:8,background:'#F9FAFB',borderRadius:8}}><div style={{fontSize:'18px',fontWeight:700,color:'#1B2A4A'}}>{postAnalysis[analyzerPost].reach}</div><div style={{fontSize:'10px',color:'#999'}}>Reach</div></div>
+                          </div>
+                        </div>
+                        <div className="analysis-item">
+                          <div className="analysis-label">Engagement</div>
+                          <div className="analysis-bar"><div className="analysis-bar-fill" style={{width:`${postAnalysis[analyzerPost].score}%`,background:postAnalysis[analyzerPost].score>=80?'#4CAF50':postAnalysis[analyzerPost].score>=60?'#FF9800':'#f44336'}}/></div>
+                        </div>
+                        <div className="analysis-item">
+                          <div className="analysis-label">✅ Fortalezas</div>
+                          <div className="analysis-value">{postAnalysis[analyzerPost].strengths}</div>
+                        </div>
+                        <div className="analysis-item">
+                          <div className="analysis-label">⚠️ Áreas de mejora</div>
+                          <div className="analysis-value">{postAnalysis[analyzerPost].weaknesses}</div>
+                        </div>
+                        <div className="analysis-item">
+                          <div className="analysis-label">💡 Recomendación</div>
+                          <div className="analysis-value" style={{color:'#C4622D',fontWeight:500}}>{postAnalysis[analyzerPost].improvement}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSubTab === 'report' && (
+                  <div>
+                    <div className="report-card">
+                      <div className="report-header">
+                        <div className="report-title">📋 Informe Semanal</div>
+                        <div className="report-date">{weeklyReport.period}</div>
+                      </div>
+                      {weeklyReport.metrics.map((m,i) => (
+                        <div key={i} className="metric-row">
+                          <div className="metric-name">{m.name}</div>
+                          <div style={{display:'flex',alignItems:'center',gap:10}}>
+                            <div className="metric-value">{m.value}</div>
+                            <div className={`metric-change ${m.up?'metric-up':'metric-down'}`}>{m.change}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="report-card">
+                      <h4 style={{fontSize:'15px',fontWeight:600,color:'#1B2A4A',marginBottom:12}}>🏆 Top Post de la Semana</h4>
+                      <div className="top-post-mini">
+                        <iframe src={`https://www.instagram.com/p/${weeklyReport.topPost}/embed`} loading="lazy" title="Top post"/>
+                        <div className="top-post-info">
+                          <h4>Taco Day Celebration</h4>
+                          <p>847 likes • 62 comments • 18.6K reach</p>
+                          <p style={{marginTop:8}}>Score: 92/100 — El mejor post del período por engagement y alcance.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="report-card">
+                      <h4 style={{fontSize:'15px',fontWeight:600,color:'#1B2A4A',marginBottom:12}}>💡 Insight Principal</h4>
+                      <div className="insight-box"><p>{weeklyReport.insight}</p></div>
+                    </div>
+                    <div className="report-card">
+                      <h4 style={{fontSize:'15px',fontWeight:600,color:'#1B2A4A',marginBottom:12}}>🎯 Acciones Recomendadas</h4>
+                      {weeklyReport.actions.map((a,i) => (
+                        <div key={i} style={{padding:'10px 0',borderBottom:i<weeklyReport.actions.length-1?'1px solid #f0f0f0':'none',fontSize:'13px',color:'#555',display:'flex',gap:8}}>
+                          <span style={{color:'#C4622D',fontWeight:700}}>→</span> {a}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ===== ESTRATEGIA TAB ===== */}
+            {activeTab === 'estrategia' && (
+              <div className="tab-content">
+                <div className="ai-card" style={{marginBottom:24}}>
+                  <h3>🎯 Estrategia de Mejora para @ohmexico</h3>
+                  <p style={{fontSize:'13px',color:'#666'}}>Basado en el análisis del feed, estos son los ajustes concretos que pueden mejorar el rendimiento de la cuenta.</p>
+                </div>
+                <div className="strategy-grid">
+                  {strategies.map((s,i) => (
+                    <div key={i} className="strategy-card">
+                      <div className="strategy-icon">{s.icon}</div>
+                      <h4>{s.title}</h4>
+                      <p>{s.desc}</p>
+                      <div className="action-items">
+                        {s.actions.map((a,j) => <div key={j} className="action-item">{a}</div>)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ===== CALENDARIO TAB ===== */}
             {activeTab === 'calendario' && (
               <div className="tab-content">
+                <div style={{display:'flex',gap:12,marginBottom:16,flexWrap:'wrap'}}>
+                  {Object.entries(calTypeColors).map(([type,color]) => (
+                    <div key={type} style={{display:'flex',alignItems:'center',gap:6,fontSize:'12px'}}>
+                      <div style={{width:10,height:10,borderRadius:2,background:color}}/>
+                      <span style={{color:'#FFF',opacity:.7,textTransform:'capitalize'}}>{type}</span>
+                    </div>
+                  ))}
+                </div>
                 <div className="calendar-grid">
                   <div className="calendar-header">
-                    {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sab', 'Dom'].map(day => (
-                      <div key={day} className="calendar-day-header">{day}</div>
+                    {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d => (
+                      <div key={d} className="calendar-day-header">{d}</div>
                     ))}
                   </div>
                   <div className="calendar-days">
-                    {calendarDays.map(day => (
-                      <div key={day.date} className="calendar-day">
-                        <div className="calendar-date">{day.date}</div>
-                        <div className="calendar-content">{day.content}</div>
-                      </div>
-                    ))}
+                    {[null,null].concat(calendarDays).map((day,i) => {
+                      if (!day) return <div key={`empty-${i}`} className="calendar-day" style={{opacity:.3,minHeight:80}}/>;
+                      return (
+                        <div key={day.date} className="calendar-day" style={{borderLeft:`3px solid ${calTypeColors[day.type]||'#eee'}`}}>
+                          <div className="calendar-date">{day.date}</div>
+                          <div className="calendar-content">{day.content}</div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
             )}
 
+            {/* ===== COMPETENCIA TAB ===== */}
             {activeTab === 'competencia' && (
               <div className="tab-content">
                 <div className="comparison-chart">
                   <div className="chart-title">Comparación de Seguidores</div>
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={280}>
                     <BarChart data={competitorData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="name" stroke="#666" />
-                      <YAxis stroke="#666" label={{ value: 'Followers (K)', angle: -90, position: 'insideLeft' }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#FFFFFF',
-                          border: '1px solid #C4622D',
-                          borderRadius: '8px'
-                        }}
-                      />
-                      <Bar dataKey="followers" fill="#C4622D" radius={[8, 8, 0, 0]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0"/>
+                      <XAxis dataKey="name" stroke="#666"/><YAxis stroke="#666" label={{value:'Followers (K)',angle:-90,position:'insideLeft',style:{fontSize:12}}}/>
+                      <Tooltip contentStyle={{backgroundColor:'#FFF',border:'1px solid #C4622D',borderRadius:'8px'}}/>
+                      <Bar dataKey="followers" fill="#C4622D" radius={[6,6,0,0]}/>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-
                 <div className="competitor-grid">
-                  {competitors.map((competitor, idx) => (
-                    <div key={idx} className="competitor-card">
+                  {competitors.map((c,i) => (
+                    <div key={i} className="competitor-card">
                       <div className="competitor-header">
-                        <div className="competitor-handle">
-                          {competitor.handle}
-                          {competitor.verified && <span className="verified-badge">✓</span>}
-                          {competitor.michelin && <span className="verified-badge">⭐</span>}
-                        </div>
-                        <div className="competitor-stats">
-                          {competitor.followers} followers • {competitor.posts} posts
-                        </div>
+                        <div className="competitor-handle">{c.handle} {c.verified && <span className="verified-badge">✓</span>} {c.michelin && <span style={{color:'#D4A030'}}>⭐</span>}</div>
+                        <div className="competitor-stats">{c.followers} followers • {c.posts} posts</div>
                       </div>
-                      <div className="competitor-bio">{competitor.bio}</div>
-                      <div className="competitor-location">📍 {competitor.location}</div>
+                      <div className="competitor-bio">{c.bio}</div>
+                      <div className="competitor-location">📍 {c.location}</div>
                       <div className="competitor-posts">
-                        {competitor.posts_shortcodes.map(shortcode => (
-                          <div key={shortcode} className="competitor-post">
-                            <iframe
-                              src={`https://www.instagram.com/p/${shortcode}/embed`}
-                              frameBorder="0"
-                              scrolling="no"
-                              allowTransparency="true"
-                              loading="lazy"
-                            ></iframe>
+                        {c.posts_shortcodes.map((code,j) => (
+                          <div key={j} className="competitor-post">
+                            <iframe src={`https://www.instagram.com/p/${code}/embed`} loading="lazy" title={`${c.handle} post ${j+1}`}/>
                           </div>
                         ))}
                       </div>
@@ -1023,25 +898,19 @@
               </div>
             )}
 
+            {/* ===== LOCACIONES TAB ===== */}
             {activeTab === 'locaciones' && (
               <div className="tab-content">
                 <div className="locations-grid">
-                  {locations.map(location => (
-                    <div key={location.name} className="location-card">
+                  {locations.map((loc,i) => (
+                    <div key={i} className="location-card">
                       <div className="location-header">
-                        <div className="location-name">{location.name}</div>
-                        <div className="location-address">{location.address}</div>
+                        <div className="location-name">{loc.name}</div>
+                        <div className="location-address">{loc.address}</div>
                       </div>
                       <div className="location-details">
-                        <div className="location-detail">
-                          <strong>📞 Teléfono:</strong> {location.phone}
-                        </div>
-                        <div className="location-detail">
-                          <strong>⏰ Horarios:</strong> {location.hours}
-                        </div>
-                        <div className="location-detail">
-                          <strong>🌐 Instagram:</strong> <a href="https://www.instagram.com/oh.mexico.miami/" target="_blank" rel="noopener noreferrer" style={{ color: '#C4622D', textDecoration: 'none' }}>@oh.mexico.miami</a>
-                        </div>
+                        <div className="location-detail"><strong>📞</strong> {loc.phone}</div>
+                        <div className="location-detail"><strong>🕐</strong> {loc.hours}</div>
                       </div>
                     </div>
                   ))}
@@ -1053,10 +922,7 @@
       );
     };
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<Dashboard />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard/>);
   </script>
-
-  <script async defer src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
